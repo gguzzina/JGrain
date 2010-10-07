@@ -9,7 +9,7 @@ import effects.*;
 
 /**
  * @author Giulio Guzzinati
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class JGrain {
 	/**
@@ -36,7 +36,7 @@ public class JGrain {
 		mainWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		mainWin.setSize(800,400);
 		mainWin.setJMenuBar(barra);
-		//mainCont.setLayout(new GridLayout(1,2));
+//		mainCont.setLayout(new GridLayout(1,2));
 		mainCont.setLayout(new BorderLayout());
 		mainCont.add(box);
 		mainCont.add(sidebar, BorderLayout.EAST);

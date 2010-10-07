@@ -3,6 +3,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 
@@ -23,12 +24,15 @@ public class ImageEngine implements ActionListener{
 	protected File file;
 	protected ImageBox box;
 	
+	
 	public ImageEngine(ImageBox imgbx){
-		file = new File("/home/skarn/Documenti/Universita/V Anno/Java/Eclipse/jgrain/src/Dot_Blot.jpg");
+		try { file = new File(this.getClass().getResource("files/Dot_Blot.jpg").toURI());
+		} catch (URISyntaxException e1) { e1.printStackTrace(); }
+//		file = new File("/home/skarn/Documenti/Universita/V Anno/Java/Eclipse/jgrain/src/Dot_Blot.jpg");
 //		file = new File("/home/skarn/Documenti/Universita/V Anno/Java/Eclipse/jgrain/src/garbage_collector.jpg");
-			{try {	immagine = ImageIO.read(file);	} catch (IOException e) {}}
+		{try {	immagine = ImageIO.read(file);	} catch (IOException e) {System.out.println("errore!!");}
 		box = imgbx;
-		box.set(immagine);
+		box.set(immagine);}
 	}
 	
 	public void openImage(File file){
