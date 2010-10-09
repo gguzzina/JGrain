@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
  */
 public class Monochrome extends ImageEffect {
 	JSlider rthresh, gthresh, bthresh;
+	String name = "Monocromatizza";
 	
 	
 	/* (non-Javadoc)
@@ -44,7 +45,7 @@ public class Monochrome extends ImageEffect {
 	@Override
 	public JPanel getSidebar(ActionListener engine) {
 		JPanel sidebar = new JPanel();
-		sidebar.setLayout(new GridLayout(6,1));
+		sidebar.setLayout(new GridLayout(3,1));
 		
 		rthresh = new JSlider(0, 255);
 		rthresh.setBorder(new TitledBorder("Soglia per il rosso"));
@@ -66,6 +67,11 @@ public class Monochrome extends ImageEffect {
 		
 
 		return sidebar;
+	}
+
+	@Override
+	public String getName() {
+		return "Monocromatizza";
 	}
 
 }

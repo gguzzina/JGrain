@@ -1,6 +1,5 @@
 import java.awt.*;
 import javax.swing.*;
-import effects.*;
 
 
 /**
@@ -9,7 +8,7 @@ import effects.*;
 
 /**
  * @author Giulio Guzzinati
- * @version 0.1.1
+ * @version 0.2.0
  */
 public class JGrain {
 	/**
@@ -41,7 +40,7 @@ public class JGrain {
 		mainCont.add(box);
 		mainCont.add(sidebar, BorderLayout.EAST);
 		
-		engine.setEffect(new Monochrome());
+//		engine.setEffect(new Monochrome());
 		mainWin.pack();
 		mainWin.setVisible(true);
 		

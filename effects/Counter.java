@@ -32,4 +32,10 @@ public class Counter extends ImageEffect {
 		return null;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -51,6 +51,10 @@ public class MenuBar extends JMenuBar {
 	                engine.openImage(file);}}});
 	salva = new JMenuItem("Salva");
 	chiudi = new JMenuItem("Chiudi");
+		chiudi.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);}});
 		file.add(apri);
 		file.add(salva);
 		file.add(chiudi);
