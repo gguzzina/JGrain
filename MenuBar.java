@@ -72,7 +72,6 @@ public class MenuBar extends JMenuBar {
 		modifica.add(applica);
 		modifica.add(ricarica);
 	}
-
 }
 	
 	

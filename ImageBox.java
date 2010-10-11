@@ -24,7 +24,7 @@ public class ImageBox extends JPanel {
 	protected BufferedImage immagine, zimmagine;
 	protected DisplayJAI display;
 	protected JScrollPane pane;
-	protected float zoom = 1f;
+	protected float zoom = 1.7f;
 	protected Dimension dim;
 	protected JPanel toolbar;
 	protected JTextField zm;

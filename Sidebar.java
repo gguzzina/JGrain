@@ -118,6 +118,8 @@ public class Sidebar extends JPanel implements ActionListener{
 	class Section extends JPanel implements ActionListener{
 		ImageEngine engine;
 		int num;
+		JButton rmv;
+		JButton app;
 		
 		public Section(ImageEffect eft, ImageEngine engine){
 			this.engine = engine;
@@ -126,8 +128,9 @@ public class Sidebar extends JPanel implements ActionListener{
 			setLayout(new BorderLayout());
 			JPanel south = new JPanel(new FlowLayout());
 			setBorder(new TitledBorder(eft.getName()));
-			JButton app = new JButton("Applica");
-			JButton rmv = new JButton("Elimina");
+			app = new JButton("Applica");
+				app.addActionListener(this);
+			rmv = new JButton("Elimina");
 				rmv.addActionListener(this);
 				
 				
@@ -143,7 +146,11 @@ public class Sidebar extends JPanel implements ActionListener{
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			engine.removeEffect(num);
+			if (e.getSource() == rmv) {
+				engine.removeEffect(num);
+			} else if (e.getSource() == app) {
+				engine.chooseEffect(num);
+			}
 		}
 
 	}

@@ -70,6 +70,8 @@ public class ImageEngine implements ActionListener{
 		eftlist[neft] = eft;
 		sidebar.addEffect(eft);
 		neft = neft + 1;
+		chainBuild();
+
 	}
 	
 	public void removeEffect(int del){
@@ -85,27 +87,29 @@ public class ImageEngine implements ActionListener{
 	public void sidebar(Sidebar sidebar){
 		this.sidebar = sidebar;
 	}
-
+	
+	public void chooseEffect(int num){
+		immagine = oplist[num + 1].getAsBufferedImage();
+		box.set(immagine);
+	}
+	
 	public void chainBuild(){
+		reload();
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(immagine);
-		double[] cost = new double[1];
-		cost[0]=0;
-		pb.add(cost);
 		oplist[0] = JAI.create("addconst", pb);
-		for (int j = 0; j < neft; j++) {
+		for (int j = 0; j < neft; j++) { //TODO: numero taroccato a mano, sistemare
 			oplist[j+1] = eftlist[j].applyEffectJAI(oplist[j]);
 		}
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		reload();
-		for (int i = 0; i < neft; i++) {
-			immagine = eftlist[i].applyEffect(immagine);
-			box.set(immagine);
-			chainBuild();
-		}
+//		chainBuild();
+//		for (int i = 0; i < neft; i++) {
+//			immagine = eftlist[i].applyEffect(immagine);}
+		immagine = oplist[neft+1].getAsBufferedImage();
+		box.set(immagine);
 	}
 	
 //	@Override

@@ -8,7 +8,7 @@ import javax.swing.*;
 
 /**
  * @author Giulio Guzzinati
- * @version 0.2.0
+ * @version 0.2.1
  */
 public class JGrain {
 	/**
@@ -33,7 +33,7 @@ public class JGrain {
 		
 		engine.sidebar(sidebar);		
 		mainWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		mainWin.setSize(800,400);
+//		mainWin.setSize(1000,700);
 		mainWin.setJMenuBar(barra);
 //		mainCont.setLayout(new GridLayout(1,2));
 		mainCont.setLayout(new BorderLayout());
