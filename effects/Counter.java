@@ -23,8 +23,7 @@ import javax.swing.event.ChangeListener;
  */
 public class Counter extends ImageEffect {
 	int[][] bklist;
-	int numpart, srcw;
-	Point[] objpoints;
+	int numpart, srcw, w, h;
 	Color[] clrs = {Color.BLUE,Color.RED,Color.CYAN,Color.GREEN,Color.LIGHT_GRAY,
 			Color.MAGENTA,Color.ORANGE,Color.PINK,Color.YELLOW,};
 	JSlider dst;
@@ -43,8 +42,8 @@ public class Counter extends ImageEffect {
 	@Override
 	public BufferedImage applyEffect(BufferedImage img) {
 		numpart = 0;
-		int w = img.getWidth();
-		int h = img.getHeight();
+		w = img.getWidth();
+		h = img.getHeight();
 		bklist = new int[w][h];
 		srcw = dst.getValue();
 		for (int x = 0; x < w; x++){ for (int y = 0; y < h; y++) {
@@ -120,19 +119,17 @@ public class Counter extends ImageEffect {
 		int numnxtp = 0;
 		for (int i = x-srcw; i <= x+srcw ; i++) {for (int j = y-srcw; j <= y+srcw; j++) {
 //			System.out.println(i+","+j);
-			col = img.getRGB(i,j);
+			if (i >= 0 && j >= 0 && i < w && j < h){
+				col = img.getRGB(i,j);
 //			System.out.println("scancol"+col);
 			Point thisp = new Point(i,j);
 			if (col > -100) {
 				img.setRGB(i, j, clrs[numpart%clrs.length].getRGB());
 				if (bklist[i][j] == 0) {
 					bklist[i][j] = 1;
-//				} if (!(Arrays.binarySearch(objpoints, thisp)> -1)){
-//					objpoints[numobjp] = thisp;
-//					numobjp = numobjp + 1;
 					nxtpoints[numnxtp]= thisp;
 					numnxtp = numnxtp+1;}
-			}}
+			}}}
 		}
 		System.arraycopy(nxtpoints, 0, new Point[numnxtp], 0, numnxtp);
 		return nxtpoints;

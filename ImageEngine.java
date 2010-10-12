@@ -25,9 +25,9 @@ import effects.*;
 public class ImageEngine implements ActionListener{
 	protected ImageEffect effect;
 	protected int neft = 0;
+	boolean testing = false;
 	protected ImageEffect[] eftlist = new ImageEffect[10];
 	protected Sidebar sidebar;
-//	protected BufferedImage immagine = new BufferedImage(300, 300, BufferedImage.TYPE_INT_ARGB );
 	protected BufferedImage immagine = null;
 	protected File file;
 	protected ImageBox box;
@@ -36,14 +36,13 @@ public class ImageEngine implements ActionListener{
 	
 	
 	public ImageEngine(ImageBox imgbx){
-		try { file = new File(this.getClass().getResource("files/Dot_Blot.jpg").toURI());
+		if (testing == true){try { file = new File(this.getClass().getResource("files/Dot_Blot.jpg").toURI());
 		} catch (URISyntaxException e1) { e1.printStackTrace(); }
-//		file = new File("/home/skarn/Documenti/Universita/V Anno/Java/Eclipse/jgrain/src/Dot_Blot.jpg");
-//		file = new File("/home/skarn/Documenti/Universita/V Anno/Java/Eclipse/jgrain/src/garbage_collector.jpg");
-		{try {	immagine = ImageIO.read(file);	} catch (IOException e) {System.out.println("errore!!");}}
+		{try {	immagine = ImageIO.read(file);	} catch (IOException e) {System.out.println("errore!!");}}}
+		if (testing==false) {immagine = new BufferedImage(500, 400, BufferedImage.TYPE_INT_ARGB );}
 		Graphics2D g = immagine.createGraphics();
 		g.setColor(new Color ( 0, 0, 0, 0 ));
-		g.fillRect(0, 0, 300, 300);
+		g.fillRect(0, 0, 500, 400);
 		g.dispose();
 		box = imgbx;
 		box.set(immagine);
