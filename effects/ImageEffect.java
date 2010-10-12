@@ -20,9 +20,8 @@ public abstract class ImageEffect {
 	 * Andrà implementata negli effetti specifici.
 	 */
 	
-	protected BufferedImage img;
+	protected BufferedImage image;
 	protected JPanel sidebar;
-	protected String name = new String("orchidea");
 	
 	public ImageEffect(){}
 	

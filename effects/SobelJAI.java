@@ -49,7 +49,7 @@ public class SobelJAI extends ImageEffect {
 	
 	public JPanel getSidebar(ActionListener al){
 		sidebar = new JPanel();
-		JLabel text = new JLabel(); 
+		JLabel text = new JLabel(""); 
 		
 		sidebar.add(text);
 		

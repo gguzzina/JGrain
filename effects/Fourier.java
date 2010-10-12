@@ -9,29 +9,24 @@ import java.awt.image.renderable.ParameterBlock;
 
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.border.TitledBorder;
 
 /**
  * @author Giulio Guzzinati
  *
  */
-public class MonochromeJAI extends ImageEffect {
-	protected JSlider threshold;
-
-	/**
-	 * 
-	 */
+public class Fourier extends ImageEffect {
 
 	/* (non-Javadoc)
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
+	
+	@Override
 	public RenderedOp applyEffectJAI(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(op);
-		pb.add((double)threshold.getValue());
-		return JAI.create("binarize", pb);
+		return JAI.create("dft", pb);
 	}
 	
 	@Override
@@ -44,23 +39,23 @@ public class MonochromeJAI extends ImageEffect {
 		return img;
 	}
 
+	/* (non-Javadoc)
+	 * @see effects.ImageEffect#getSidebar(java.awt.event.ActionListener)
+	 */
 	@Override
 	public JPanel getSidebar(ActionListener engine) {
+		JLabel lab = new JLabel("Discrete Fourier Transform!!");
 		sidebar = new JPanel();
-		
-		threshold = new JSlider(0, 255);
-		threshold.setValue(160);
-		threshold.setBorder(new TitledBorder("Soglia"));
-		threshold.setPaintTicks(true);
-		threshold.setMajorTickSpacing(32);
-		sidebar.add(threshold);
-		
+		sidebar.add(lab);
 		return sidebar;
 	}
 
+	/* (non-Javadoc)
+	 * @see effects.ImageEffect#getName()
+	 */
 	@Override
 	public String getName() {
-		return "Monocromatizza";
+		return "FFT";
 	}
-	
+
 }

@@ -8,7 +8,7 @@ import javax.swing.*;
 
 /**
  * @author Giulio Guzzinati
- * @version 0.2.1
+ * @version 0.2.85
  */
 public class JGrain {
 	/**

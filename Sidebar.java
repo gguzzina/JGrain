@@ -29,9 +29,11 @@ public class Sidebar extends JPanel implements ActionListener{
 	protected Section[] secs = new Section[10]; 
 
 	private void comboBuild(){
-		String[] names = {"Rilevamento bordi",
-							"Monocromatizza",
-							"Monocromatizza JAI"};
+		String[] names = {new SobelJAI().getName(),
+							new MonochromeJAI().getName(),
+							new Fourier().getName(),
+							new Invert().getName(),
+							new Counter().getName()};
 		for (int i = 0; i < names.length; i++) {
 			combo.addItem(names[i]);
 		}
@@ -102,15 +104,17 @@ public class Sidebar extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int idx = combo.getSelectedIndex();
-		ImageEffect tmpeft = new SobelJAI();
 		if (idx == 0) {
-			tmpeft = new SobelJAI();
+			engine.addEffect(new SobelJAI());
 		} else if (idx == 1) {
-			tmpeft = new Monochrome();
+			engine.addEffect(new MonochromeJAI());
 		} else if (idx == 2) {
-			tmpeft = new MonochromeJAI();
+			engine.addEffect(new Fourier());
+		} else if (idx == 3) {
+			engine.addEffect(new Invert());
+		} else if (idx == 4) {
+			engine.addEffect(new Counter());
 		}
-		engine.addEffect(tmpeft);
 	}
 		
 }
