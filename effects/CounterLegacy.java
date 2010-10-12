@@ -1,6 +1,3 @@
-/**
- * 
- */
 package effects;
 
 import java.awt.Color;
@@ -17,11 +14,10 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-/**
- * @author Giulio Guzzinati
- *
- */
-public class Counter extends ImageEffect {
+
+
+public class CounterLegacy extends ImageEffect {
+
 	int[][] bklist;
 	int numpart, srcw, w, h;
 	Color[] clrs = {Color.BLUE,Color.RED,Color.CYAN,Color.GREEN,Color.LIGHT_GRAY,
@@ -54,12 +50,19 @@ public class Counter extends ImageEffect {
 			if (col > -100){
 				Point thisp = new Point(x,y);
 			if ( bklist[x][y] == 0){
-				Point[] points = scanAround(thisp, img);
-				while (points.length > 0) {
-//					System.out.println(points[0].getX() + "," + points[0].getY());
-					points = scanAround(points, img);
-				}
-				
+//				System.out.println("x="+x+",y="+y);
+				for (Point p : scanAround(thisp, img)) if(p != null) {
+//					System.out.println("p="+p.getX()+","+p.getY());
+					for (Point pt : scanAround(p, img)) if (pt != null) {
+//						System.out.println("pt="+pt.getX()+","+pt.getY());
+						for (Point pnt : scanAround(pt, img)) if (pnt != null){
+//							System.out.println("pnt="+pnt.getX()+","+pnt.getY());
+							for (Point point : scanAround(pnt, img)) if( point != null ) {
+//								System.out.println("point="+point.getX()+","+point.getY());
+								for (Point pts : scanAround(point, img)) if (pts != null) {
+									for (Point punto : scanAround(pts, img)) if (punto != null) {
+										scanAround(punto, img);
+									}}}}}}
 				numpart = numpart + 1;
 			}}}
 		}
@@ -101,14 +104,14 @@ public class Counter extends ImageEffect {
 
 	@Override
 	public String getName() {
-		return "Conta oggetti";
+		return "Conta oggetti (old)";
 	}
 	
 	Point[] scanAround(Point p, BufferedImage img){
 		int x = (int) p.getX();
 		int y = (int) p.getY();
 		int col;
-		Point[] nxtpoints = new Point[(int) Math.pow((2*srcw+1),2)];
+		Point[] nxtpoints = new Point[(2*srcw+1)*(2*srcw+1)];
 		int numnxtp = 0;
 		for (int i = x-srcw; i <= x+srcw ; i++) {for (int j = y-srcw; j <= y+srcw; j++) {
 //			System.out.println(i+","+j);
@@ -124,22 +127,11 @@ public class Counter extends ImageEffect {
 					numnxtp = numnxtp+1;}
 			}}}
 		}
-		Point[] results = new Point[numnxtp];
-		System.arraycopy(nxtpoints, 0, results, 0, numnxtp);
-		return results;
+		System.arraycopy(nxtpoints, 0, new Point[numnxtp], 0, numnxtp);
+		return nxtpoints;
 	}
 	
-	Point[] scanAround(Point[] pts, BufferedImage img){
-		int numnxtp = 0;
-		Point[] nxtpoints = new Point[(int) Math.pow((2*srcw+1),4)];
-		for (Point pnt : pts) {
-			Point[] tmppoints = scanAround(pnt, img);
-//			System.out.println("numnxtp ="+numnxtp+" length " + tmppoints.length);
-			System.arraycopy(tmppoints, 0, nxtpoints, numnxtp, tmppoints.length);
-			numnxtp = numnxtp + tmppoints.length;
-		}
-		Point[] results = new Point[numnxtp];
-		System.arraycopy(nxtpoints, 0, results, 0, numnxtp);
-		return results;
-	}
-}
+
+		
+
+}	

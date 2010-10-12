@@ -113,6 +113,7 @@ public class ImageEngine implements ActionListener{
 		box.set(immagine);
 	}
 	
+	
 //	@Override
 //	public void actionPerformed(ActionEvent e) {
 //		immagine = effect.applyEffect(immagine);

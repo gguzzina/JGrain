@@ -3,11 +3,8 @@ package effects;
 
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.renderable.ParameterBlock;
-
-import javax.media.jai.JAI;
-import javax.media.jai.RenderedOp;
-import javax.swing.JPanel;
+import javax.media.jai.*;
+import javax.swing.*;
 
 /**
  * @author skarn
@@ -20,18 +17,13 @@ public abstract class ImageEffect {
 	 * Andrà implementata negli effetti specifici.
 	 */
 	
-	protected BufferedImage image;
 	protected JPanel sidebar;
 	
 	public ImageEffect(){}
+		
+	public abstract RenderedOp applyEffectJAI(RenderedOp op);
 	
 	public abstract BufferedImage applyEffect(BufferedImage img);
-	
-	public RenderedOp applyEffectJAI(RenderedOp op){
-		ParameterBlock pb = new ParameterBlock();
-		pb.addSource(op);
-		return JAI.create("addconst", pb);
-	}
 	
 	public abstract JPanel getSidebar(ActionListener engine);
 	

@@ -1,6 +1,10 @@
 import java.awt.*;
 import javax.swing.*;
 
+import effects.Counter;
+import effects.MonochromeJAI;
+import effects.SobelJAI;
+
 
 /**
  * 
@@ -14,7 +18,9 @@ public class JGrain {
 	/**
 	 * @param args
 	 */
-	
+	protected static boolean testing;
+
+
 	/**
 	* Elimino l'eccezione per l'assenza di accelerazione nativa
 	*/
@@ -24,6 +30,7 @@ public class JGrain {
 	} 
 	
 	public static void main(String[] args) {
+		testing = false;
 		JFrame mainWin = new JFrame("JGrain");
 		Container mainCont = mainWin.getContentPane();
 		ImageBox box = new ImageBox();
@@ -43,6 +50,12 @@ public class JGrain {
 //		engine.setEffect(new Monochrome());
 		mainWin.pack();
 		mainWin.setVisible(true);
+		
+		if (testing==true) {
+			engine.addEffect(new MonochromeJAI());
+			engine.addEffect(new SobelJAI());
+			engine.addEffect(new Counter());
+		}
 		
 	}
 
