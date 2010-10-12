@@ -5,6 +5,7 @@ package effects;
 
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.renderable.ParameterBlock;
 
 import javax.media.jai.JAI;
 import javax.media.jai.RenderedOp;
@@ -32,7 +33,11 @@ public class Invert extends ImageEffect {
 	 */
 	@Override
 	public BufferedImage applyEffect(BufferedImage img) {
-		// TODO Auto-generated method stub
+		ParameterBlock pb = new ParameterBlock();
+		pb.addSource(img);
+		RenderedOp op = JAI.create("addconst", pb);
+		op = applyEffectJAI(op);
+		img = op.getAsBufferedImage();
 		return null;
 	}
 

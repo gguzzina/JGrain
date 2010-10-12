@@ -108,7 +108,7 @@ public class Counter extends ImageEffect {
 		int x = (int) p.getX();
 		int y = (int) p.getY();
 		int col;
-		Point[] nxtpoints = new Point[(int) Math.pow((2*srcw+1),2)];
+		Point[] nxtpoints = new Point[(int) Math.pow((3*srcw+3),2)];
 		int numnxtp = 0;
 		for (int i = x-srcw; i <= x+srcw ; i++) {for (int j = y-srcw; j <= y+srcw; j++) {
 //			System.out.println(i+","+j);
@@ -131,7 +131,7 @@ public class Counter extends ImageEffect {
 	
 	Point[] scanAround(Point[] pts, BufferedImage img){
 		int numnxtp = 0;
-		Point[] nxtpoints = new Point[(int) Math.pow((2*srcw+1),4)];
+		Point[] nxtpoints = new Point[(int) Math.pow((3*srcw+3),4)];
 		for (Point pnt : pts) {
 			Point[] tmppoints = scanAround(pnt, img);
 //			System.out.println("numnxtp ="+numnxtp+" length " + tmppoints.length);
