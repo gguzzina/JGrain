@@ -1,9 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 
-import effects.Counter;
-import effects.MonochromeJAI;
-import effects.SobelJAI;
+import effects.*;
 
 
 /**
@@ -53,8 +51,9 @@ public class JGrain {
 		mainWin.setVisible(true);
 		
 		if (testing==true) {
-			engine.addEffect(new MonochromeJAI());
-			engine.addEffect(new SobelJAI());
+			engine.addEffect(new GrayScale());
+			engine.addEffect(new BinarizeGray());
+			engine.addEffect(new Invert());
 			engine.addEffect(new Counter());
 		}
 		

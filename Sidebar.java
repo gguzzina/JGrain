@@ -30,7 +30,7 @@ public class Sidebar extends JPanel implements ActionListener{
 
 	private void comboBuild(){
 		String[] names = {new SobelJAI().getName(),
-							new MonochromeJAI().getName(),
+							new BinarizeGray().getName(),
 							new GrayScale().getName(),
 							new Invert().getName(),
 							new Counter().getName(),
@@ -55,9 +55,9 @@ public class Sidebar extends JPanel implements ActionListener{
 		JButton applica = new JButton("Applica");
 		applica.addActionListener(engine);
 		//creo la parte inferiore
-		JPanel bottom = new JPanel(new GridLayout(2,1));
-		bottom.add(applica);
-		bottom.add(new JPanel());
+//		JPanel bottom = new JPanel(new GridLayout(2,1));
+//		bottom.add(applica);
+//		bottom.add(new JPanel());
 		//creo il centro, vuoto, inizializzo le sezioni
 		center = new JPanel();
 //		center.setMaximumSize(new Dimension(240, 800));
@@ -65,7 +65,7 @@ public class Sidebar extends JPanel implements ActionListener{
 		JScrollPane pane = new JScrollPane(center);
 		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//aggiungo tutto
-		add(bottom, BorderLayout.SOUTH);
+//		add(bottom, BorderLayout.SOUTH);
 		add(top, BorderLayout.NORTH);
 		add(pane);
 		this.engine = engine;
@@ -107,7 +107,7 @@ public class Sidebar extends JPanel implements ActionListener{
 		if (idx == 0) {
 			engine.addEffect(new SobelJAI());
 		} else if (idx == 1) {
-			engine.addEffect(new MonochromeJAI());
+			engine.addEffect(new BinarizeGray());
 		} else if (idx == 2) {
 			engine.addEffect(new GrayScale());
 		} else if (idx == 3) {

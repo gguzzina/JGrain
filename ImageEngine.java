@@ -25,7 +25,7 @@ import effects.*;
 public class ImageEngine implements ActionListener{
 	protected ImageEffect effect;
 	protected int neft = 0;
-	boolean testing = false;
+	boolean testing = true;
 	protected ImageEffect[] eftlist = new ImageEffect[10];
 	protected Sidebar sidebar;
 	protected BufferedImage immagine = null;
@@ -36,7 +36,7 @@ public class ImageEngine implements ActionListener{
 	
 	
 	public ImageEngine(ImageBox imgbx){
-		if (testing == true){try { file = new File(this.getClass().getResource("files/Dot_Blot.jpg").toURI());
+		if (testing == true){try { file = new File(this.getClass().getResource("files/Cell_Colony.jpg").toURI());
 		} catch (URISyntaxException e1) { e1.printStackTrace(); }
 		{try {	immagine = ImageIO.read(file);	} catch (IOException e) {System.out.println("errore!!");}}}
 		if (testing==false) {immagine = new BufferedImage(500, 400, BufferedImage.TYPE_INT_ARGB );}

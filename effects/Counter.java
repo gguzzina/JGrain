@@ -5,6 +5,7 @@ package effects;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionListener;
@@ -38,6 +39,14 @@ public class Counter extends ImageEffect {
 	 */
 	@Override
 	public BufferedImage applyEffect(BufferedImage img) {
+		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
+			    BufferedImage.TYPE_INT_RGB);  
+			Graphics g = image.getGraphics();  
+			g.drawImage(img, 0, 0, null);  
+			g.dispose();
+		img = image;
+		
+		
 		numpart = 0;
 		w = img.getWidth();
 		h = img.getHeight();
@@ -51,7 +60,7 @@ public class Counter extends ImageEffect {
 			if (col > -100){
 				Point thisp = new Point(x,y);
 			if ( bklist[x][y] == 0){
-				bklist[x][y] = 1;
+//				bklist[x][y] = 1;
 				Point[] points = scanAround(thisp, img);
 				while (points.length > 0) {
 //					System.out.println(points[0].getX() + "," + points[0].getY());
@@ -66,7 +75,6 @@ public class Counter extends ImageEffect {
 		Graphics2D g2d = img.createGraphics();
 		g2d.setFont(fnt);
         g2d.setColor(Color.RED);
-        g2d.setBackground(Color.WHITE);
         g2d.drawString(new String(numpart+""), 10, 30);
 		
 		return img;
@@ -120,7 +128,7 @@ public class Counter extends ImageEffect {
 	
 	Point[] scanAround(Point[] pts, BufferedImage img){
 		int numnxtp = 0;
-		Point[] nxtpoints = new Point[pts.length*(2*srcw+1)];
+		Point[] nxtpoints = new Point[(int) (pts.length*Math.pow((3*srcw+3),2))];
 		for (Point pnt : pts) {
 			Point[] tmppoints = scanAround(pnt, img);
 //			System.out.println("numnxtp ="+numnxtp+" length " + tmppoints.length);
