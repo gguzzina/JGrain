@@ -30,7 +30,7 @@ public class JGrain {
 	} 
 	
 	public static void main(String[] args) {
-		testing = false;
+		testing = true;
 		JFrame mainWin = new JFrame("JGrain");
 		Container mainCont = mainWin.getContentPane();
 		ImageBox box = new ImageBox();
@@ -43,7 +43,8 @@ public class JGrain {
 //		mainWin.setSize(1000,700);
 		mainWin.setJMenuBar(barra);
 //		mainCont.setLayout(new GridLayout(1,2));
-		mainCont.setLayout(new BorderLayout());
+		BorderLayout layout = new BorderLayout();
+		mainCont.setLayout(layout);
 		mainCont.add(box);
 		mainCont.add(sidebar, BorderLayout.EAST);
 		

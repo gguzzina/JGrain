@@ -59,11 +59,15 @@ public class Sidebar extends JPanel implements ActionListener{
 		bottom.add(applica);
 		bottom.add(new JPanel());
 		//creo il centro, vuoto, inizializzo le sezioni
-		centerinit();
+		center = new JPanel();
+//		center.setMaximumSize(new Dimension(240, 800));
+		center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+		JScrollPane pane = new JScrollPane(center);
+		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//aggiungo tutto
 		add(bottom, BorderLayout.SOUTH);
 		add(top, BorderLayout.NORTH);
-		add(center);
+		add(pane);
 		this.engine = engine;
 		
 		
@@ -93,11 +97,6 @@ public class Sidebar extends JPanel implements ActionListener{
 		}
 		validate();
 		repaint();
-	}
-	
-	private void centerinit() {
-		center = new JPanel();
-		center.setLayout(new FlowLayout());
 	}
 
 

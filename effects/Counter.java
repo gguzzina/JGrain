@@ -11,12 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
-import javax.media.jai.JAI;
-import javax.media.jai.RenderedOp;
+import javax.media.jai.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 /**
  * @author Giulio Guzzinati
  *
@@ -25,7 +22,7 @@ public class Counter extends ImageEffect {
 	int[][] bklist;
 	int numpart, srcw, w, h;
 	Color[] clrs = {Color.BLUE,Color.RED,Color.CYAN,Color.GREEN,Color.LIGHT_GRAY,
-			Color.MAGENTA,Color.ORANGE,Color.PINK,Color.YELLOW,};
+			Color.MAGENTA,Color.ORANGE,Color.PINK,Color.YELLOW,Color.DARK_GRAY,new Color(115, 0, 85)};
 	JSlider dst;
 	
 	public RenderedOp applyEffectJAI(RenderedOp op){
@@ -54,6 +51,7 @@ public class Counter extends ImageEffect {
 			if (col > -100){
 				Point thisp = new Point(x,y);
 			if ( bklist[x][y] == 0){
+				bklist[x][y] = 1;
 				Point[] points = scanAround(thisp, img);
 				while (points.length > 0) {
 //					System.out.println(points[0].getX() + "," + points[0].getY());
@@ -69,7 +67,7 @@ public class Counter extends ImageEffect {
 		g2d.setFont(fnt);
         g2d.setColor(Color.RED);
         g2d.setBackground(Color.WHITE);
-        g2d.drawString(new String(numpart+" "), 10, 30);
+        g2d.drawString(new String(numpart+""), 10, 30);
 		
 		return img;
 	}
@@ -79,23 +77,15 @@ public class Counter extends ImageEffect {
 	 */
 	@Override
 	public JPanel getSidebar(ActionListener engine) {
-		sidebar = new JPanel();
-		
-		final JTextField text = new JTextField(2);
-			text.setText("5");
-			text.setEditable(false);
-		
-		dst = new JSlider(1, 20);
-		dst.setValue(5);
+		sidebar = new JPanel();		
+		dst = new JSlider(1, 17);
+		dst.setValue(1);
 		dst.setBorder(new TitledBorder("Distanza dei vicini"));
 		dst.setPaintTicks(true);
-		dst.setMajorTickSpacing(1);
-		dst.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				text.setText(Integer.toString(dst.getValue())); }});
+		dst.setPaintLabels(true);
+		dst.setMajorTickSpacing(4);
+		dst.setMinorTickSpacing(2);
 		sidebar.add(dst);
-		sidebar.add(text);
 		return sidebar;
 	}
 
@@ -116,12 +106,11 @@ public class Counter extends ImageEffect {
 				col = img.getRGB(i,j);
 //			System.out.println("scancol"+col);
 			Point thisp = new Point(i,j);
-			if (col > -100) {
-				img.setRGB(i, j, clrs[numpart%clrs.length].getRGB());
-				if (bklist[i][j] == 0) {
+			if (col > -100 && bklist[i][j] == 0) {
+					img.setRGB(i, j, clrs[numpart%clrs.length].getRGB());
 					bklist[i][j] = 1;
 					nxtpoints[numnxtp]= thisp;
-					numnxtp = numnxtp+1;}
+					numnxtp = numnxtp+1;
 			}}}
 		}
 		Point[] results = new Point[numnxtp];
@@ -131,7 +120,7 @@ public class Counter extends ImageEffect {
 	
 	Point[] scanAround(Point[] pts, BufferedImage img){
 		int numnxtp = 0;
-		Point[] nxtpoints = new Point[(int) Math.pow((3*srcw+3),4)];
+		Point[] nxtpoints = new Point[pts.length*(2*srcw+1)];
 		for (Point pnt : pts) {
 			Point[] tmppoints = scanAround(pnt, img);
 //			System.out.println("numnxtp ="+numnxtp+" length " + tmppoints.length);
