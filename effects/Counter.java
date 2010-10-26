@@ -3,18 +3,15 @@
  */
 package effects;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.awt.image.renderable.ParameterBlock;
 
 import javax.media.jai.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
 /**
  * @author Giulio Guzzinati
  *
@@ -26,10 +23,10 @@ public class Counter extends ImageEffect {
 			Color.MAGENTA,Color.ORANGE,Color.PINK,Color.YELLOW,Color.DARK_GRAY,new Color(115, 0, 85)};
 	JSlider dst;
 	
-	public RenderedOp applyEffectJAI(RenderedOp op){
+	public RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		BufferedImage img = op.getAsBufferedImage();
-		pb.addSource(applyEffect(img));
+		pb.addSource(getBufferedImage(img));
 		return JAI.create("addconst", pb);
 	}
 	
@@ -38,7 +35,7 @@ public class Counter extends ImageEffect {
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
 	@Override
-	public BufferedImage applyEffect(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) {
 		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
 			    BufferedImage.TYPE_INT_RGB);  
 			Graphics g = image.getGraphics();  

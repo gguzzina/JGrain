@@ -27,7 +27,7 @@ public class BinarizeGray extends ImageEffect {
 	/* (non-Javadoc)
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
-	public RenderedOp applyEffectJAI(RenderedOp op){
+	public RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(op);
 		pb.add((double)threshold.getValue());
@@ -35,11 +35,11 @@ public class BinarizeGray extends ImageEffect {
 	}
 	
 	@Override
-	public BufferedImage applyEffect(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) {
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(img);
 		RenderedOp op = JAI.create("addconst", pb);
-		op = applyEffectJAI(op);
+		op = getRenderedOp(op);
 		img = op.getAsBufferedImage();
 		return img;
 	}
@@ -61,6 +61,11 @@ public class BinarizeGray extends ImageEffect {
 	@Override
 	public String getName() {
 		return "Binarizza, scala di grigi";
+	}
+	
+	@Override
+	public String getArgumentError() {
+		return "Questo effetto lavora su immagini in scala di grigi,\n converti l'immagine o utilizza l'effetto 'Binarizza, Colore'"; 	
 	}
 	
 }

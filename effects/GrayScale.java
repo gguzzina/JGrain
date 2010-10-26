@@ -20,19 +20,19 @@ public class GrayScale extends ImageEffect {
 
 
 	
-	public RenderedOp applyEffectJAI(RenderedOp op){
+	public RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
-		pb.addSource(applyEffect(op.getAsBufferedImage()));
+		pb.addSource(getBufferedImage(op.getAsBufferedImage()));
 		return JAI.create("absolute", pb);
 	}
 	
 	@Override
-	public BufferedImage applyEffect(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) {
 		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
 			    BufferedImage.TYPE_BYTE_GRAY);  
 			Graphics g = image.getGraphics();  
 			g.drawImage(img, 0, 0, null);  
-			g.dispose(); 
+			g.dispose();
 		return image;
 	}
 

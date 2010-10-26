@@ -23,7 +23,7 @@ public class SobelJAI extends ImageEffect {
 	public SobelJAI() {
 	}
 
-	public RenderedOp applyEffectJAI(RenderedOp op) {
+	public RenderedOp getRenderedOp(RenderedOp op) {
 		KernelJAI sobelVertKernel = KernelJAI.GRADIENT_MASK_SOBEL_VERTICAL;
 		KernelJAI sobelHorizKernel = KernelJAI.GRADIENT_MASK_SOBEL_HORIZONTAL;
 		ParameterBlock pb = new ParameterBlock();
@@ -34,16 +34,11 @@ public class SobelJAI extends ImageEffect {
 		}
 	
 	@Override
-	public BufferedImage applyEffect(BufferedImage img){
+	public BufferedImage getBufferedImage(BufferedImage img){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(img);
-		double[] cost = new double[1];
-		cost[0] = 0;
-		pb.add(cost);
 		RenderedOp op = JAI.create("addconst", pb);
-		op = this.applyEffectJAI(op);
-		img = op.getAsBufferedImage();
-		return img;
+		return this.getRenderedOp(op).getAsBufferedImage();
 	}
 	
 	

@@ -45,11 +45,21 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(engine.getFile().getParentFile());
 				int returnVal = fc.showOpenDialog(null);
 	            if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                File file = fc.getSelectedFile();
 	                engine.openImage(file);}}});
 	salva = new JMenuItem("Salva");
+		salva.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(engine.getFile().getParentFile());
+				int returnVal = fc.showSaveDialog(null);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					engine.saveImage(file);}}});
 	chiudi = new JMenuItem("Chiudi");
 		chiudi.addActionListener(new ActionListener() {
 			@Override

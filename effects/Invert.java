@@ -22,7 +22,7 @@ public class Invert extends ImageEffect {
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
 	@Override
-	public RenderedOp applyEffectJAI(RenderedOp op) {
+	public RenderedOp getRenderedOp(RenderedOp op) {
 		return JAI.create("invert", op);
 	}
 	
@@ -32,13 +32,10 @@ public class Invert extends ImageEffect {
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
 	@Override
-	public BufferedImage applyEffect(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) {
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(img);
-		RenderedOp op = JAI.create("addconst", pb);
-		op = applyEffectJAI(op);
-		img = op.getAsBufferedImage();
-		return null;
+		return this.getRenderedOp(JAI.create("addconst", pb)).getAsBufferedImage();
 	}
 
 	/* (non-Javadoc)

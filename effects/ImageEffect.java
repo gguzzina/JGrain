@@ -21,12 +21,15 @@ public abstract class ImageEffect {
 	
 	public ImageEffect(){}
 		
-	public abstract RenderedOp applyEffectJAI(RenderedOp op);
+	public abstract RenderedOp getRenderedOp(RenderedOp op);
 	
-	public abstract BufferedImage applyEffect(BufferedImage img);
+	public abstract BufferedImage getBufferedImage(BufferedImage img);
 	
 	public abstract JPanel getSidebar(ActionListener engine);
 	
 	public abstract String getName();
-
+	
+	public String getArgumentError(){
+		return "Errore, argomento non valido";
+	}
 }

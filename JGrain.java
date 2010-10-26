@@ -16,7 +16,6 @@ public class JGrain {
 	/**
 	 * @param args
 	 */
-	protected static boolean testing;
 
 
 	/**
@@ -28,7 +27,7 @@ public class JGrain {
 	} 
 	
 	public static void main(String[] args) {
-		testing = true;
+		boolean testing = false;
 		JFrame mainWin = new JFrame("JGrain");
 		Container mainCont = mainWin.getContentPane();
 		ImageBox box = new ImageBox();

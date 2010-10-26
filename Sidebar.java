@@ -31,10 +31,10 @@ public class Sidebar extends JPanel implements ActionListener{
 	private void comboBuild(){
 		String[] names = {new SobelJAI().getName(),
 							new BinarizeGray().getName(),
+							new BinarizeColor().getName(),
 							new GrayScale().getName(),
 							new Invert().getName(),
-							new Counter().getName(),
-							new CounterLegacy().getName()};
+							new Counter().getName()};
 		for (int i = 0; i < names.length; i++) {
 			combo.addItem(names[i]);
 		}
@@ -109,17 +109,17 @@ public class Sidebar extends JPanel implements ActionListener{
 		} else if (idx == 1) {
 			engine.addEffect(new BinarizeGray());
 		} else if (idx == 2) {
-			engine.addEffect(new GrayScale());
+			engine.addEffect(new BinarizeColor());
 		} else if (idx == 3) {
-			engine.addEffect(new Invert());
+			engine.addEffect(new GrayScale());
 		} else if (idx == 4) {
-			engine.addEffect(new Counter());
+			engine.addEffect(new Invert());
 		} else if (idx == 5) {
-			engine.addEffect(new CounterLegacy());
+			engine.addEffect(new Counter());
 		}
 	}
-		
 }
+
 	@SuppressWarnings("serial")
 	class Section extends JPanel implements ActionListener{
 		ImageEngine engine;
