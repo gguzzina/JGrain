@@ -53,7 +53,6 @@ public class ImageEngine implements ActionListener{
 	 * attraverso l'{@link ImageBox} fornito come parametro 
 	 * 
 	 * @param imgbx {@link ImageBox} in cui visualizzare le immagini 
-	 * @return l'ImageEngine creato.
 	 */	
 	public ImageEngine(ImageBox imgbx){
 		
@@ -124,6 +123,18 @@ public class ImageEngine implements ActionListener{
 		chainBuild();
 	}
 	
+	/**
+	 * rimuove un elemento dal vettore <code>eftlist</code>.
+	 * 
+	 * L'intero <code>neft</code> viene decrementato,
+	 * e gli elementi successivi a quello eliminato vengono spostati,
+	 * in modo da avere <code>neft </code> elementi consecutivi.
+	 * Dalla sidebar viene eliminata la sezione corrispondente all'effetto.
+	 * 
+	 * @param del l'indice dell'ImageEffect da eliminare
+	 * 
+	 */
+	
 	public void removeEffect(int del){
 		neft = neft-1;
 	    System.arraycopy(eftlist,del+1,eftlist,del,eftlist.length-1-del);
@@ -144,8 +155,9 @@ public class ImageEngine implements ActionListener{
 	}
 	
 	/**
-	 * Ricostruisce il vettore contente le immagini che costuiscono i singoli punti
+	 * Ricostruisce i primi n elementi del vettore contente le immagini che costuiscono i singoli punti
 	 * della catena di applicazione degli effetti.
+	 * @param n 
 	 */
 	public void chainBuild(int n){
 		reload();
@@ -158,6 +170,10 @@ public class ImageEngine implements ActionListener{
 			}}
 		box.set(imglist[n]);
 	}
+	
+	/**
+	 * 
+	 */
 	
 	public void chainBuild(){
 		chainBuild(neft);

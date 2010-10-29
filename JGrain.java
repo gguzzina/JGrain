@@ -10,7 +10,7 @@ import effects.*;
 
 /**
  * @author Giulio Guzzinati
-// * @version 0.2.87
+// * @version 0.3.0
  */
 public class JGrain {
 	/**
