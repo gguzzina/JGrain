@@ -10,10 +10,7 @@ import effects.*;
 
 
 /**
- * 
- */
-
-/**
+ * una classe contenente la sidebar 
  * @author Giulio Guzzinati
  *
  */
@@ -52,8 +49,8 @@ public class Sidebar extends JPanel implements ActionListener{
 			top.add(combo);
 			top.add(add);
 		setLayout(new BorderLayout());
-		JButton applica = new JButton("Applica");
-		applica.addActionListener(engine);
+//		JButton applica = new JButton("Applica");
+//		applica.addActionListener(engine);
 		//creo la parte inferiore
 //		JPanel bottom = new JPanel(new GridLayout(2,1));
 //		bottom.add(applica);
@@ -75,7 +72,7 @@ public class Sidebar extends JPanel implements ActionListener{
 	
 	public void setEffect(effects.ImageEffect effect){
 		remove(center);
-		center = effect.getSidebar(engine);
+		center = effect.getSidebar();
 		add(center);
 		validate();
 		repaint();
@@ -143,7 +140,7 @@ public class Sidebar extends JPanel implements ActionListener{
 			south.add(app);
 			south.add(rmv);
 			add(south, BorderLayout.SOUTH);
-			add(eft.getSidebar(engine));
+			add(eft.getSidebar());
 		}
 		
 		public void setN(int n){

@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.*;
 import java.awt.image.renderable.ParameterBlock;
 import java.io.*;
@@ -29,7 +28,7 @@ import effects.*;
  * @version 0.3
  */
  
-public class ImageEngine implements ActionListener{
+public class ImageEngine /*implements ActionListener*/{
 	/** il numero di {@link ImageEffect} attualmente caricati
 	 */
 	protected int neft = 0;
@@ -124,6 +123,18 @@ public class ImageEngine implements ActionListener{
 	}
 	
 	/**
+	 * visualizza l'immagine corrispondente all'applicazione dei primi <b>num</b> effetti 
+	 * @param num l'indice dell'ultimo effetto da applicare 
+	 */
+	public void chooseEffect(int num){
+		box.set(imglist[num + 1]);
+	}
+	
+	public void applyEffect(){
+		chooseEffect(neft);
+	}
+	
+	/**
 	 * rimuove un elemento dal vettore <code>eftlist</code>.
 	 * 
 	 * L'intero <code>neft</code> viene decrementato,
@@ -142,22 +153,28 @@ public class ImageEngine implements ActionListener{
 	    chainBuild();
 	}
 	
+	/**
+	 * @return il numero di effetti caricati 
+	 */
 	public int getNum(){
 		return neft;
 	}
 	
+	/**
+	 * passa all'oggetto {@link ImageEngine} la {@link Sidebar}
+	 * del programma, in modo che esso possa caricarvi le sezioni
+	 * corrispondenti ai vari {@link ImageEffect}
+	 * @param sidebar la {@link Sidebar} del programma
+	 */
 	public void sidebar(Sidebar sidebar){
 		this.sidebar = sidebar;
 	}
 	
-	public void chooseEffect(int num){
-		box.set(imglist[num + 1]);
-	}
-	
 	/**
-	 * Ricostruisce i primi n elementi del vettore contente le immagini che costuiscono i singoli punti
+	 * Ricostruisce i primi <b>n</b> elementi del vettore contente
+	 * le immagini che costuiscono i singoli punti
 	 * della catena di applicazione degli effetti.
-	 * @param n 
+	 * @param n numero degli elementi da ricreare
 	 */
 	public void chainBuild(int n){
 		reload();
@@ -172,13 +189,18 @@ public class ImageEngine implements ActionListener{
 	}
 	
 	/**
-	 * 
+	 * Ricostruisce tutti gli elementi dell'array <code>eftlist</code>
 	 */
 	
 	public void chainBuild(){
 		chainBuild(neft);
 	}
 	
+	/**
+	 * Mostra una piccola finestra contenente un messaggio d'errore
+	 * all'intenro di una {@link JTextArea}
+	 * @param err il messaggio d'errore da visualizzare
+	 */
 	
 	public void showError(String err){
 		JFrame errWin = new JFrame("Errore!");
@@ -190,9 +212,9 @@ public class ImageEngine implements ActionListener{
 		errWin.setVisible(true);
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		imglist[0] = imglist[neft];
-		box.set(imglist[0]);
-	}	
+//	@Override
+//	public void actionPerformed(ActionEvent e) {
+//		imglist[0] = imglist[neft];
+//		box.set(imglist[0]);
+//	}	
 }

@@ -1,7 +1,6 @@
 
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import javax.media.jai.*;
 import javax.swing.*;
@@ -25,7 +24,7 @@ public abstract class ImageEffect {
 	
 	public abstract BufferedImage getBufferedImage(BufferedImage img);
 	
-	public abstract JPanel getSidebar(ActionListener engine);
+	public abstract JPanel getSidebar();
 	
 	public abstract String getName();
 	

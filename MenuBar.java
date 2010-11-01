@@ -4,25 +4,24 @@ import java.io.File;
 
 import javax.swing.*;
 
-/**
- * 
- */
 
 /**
+ * Una classe contenente una menubar per il programma JGrain
  * @author Giulio Guzzinati
- *
  */
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
 	
-	JMenu file, modifica, visualizza, preferenze;
-	JMenuItem apri, salva, chiudi;
-	JMenuItem ricarica, applica;
-	JMenuItem zoom0;
-	JMenuItem configura;
-	ImageEngine engine;
+	protected JMenu file, modifica, visualizza, preferenze;
+	protected JMenuItem apri, salva, chiudi;
+	protected JMenuItem ricarica, applica;
+	protected JMenuItem zoom0;
+	protected JMenuItem configura;
+	protected ImageEngine engine;
 	
-	
+	/**
+	 * @param engine l'{@link ImageEngine} a cui far compiere le operazioni
+	 */
 	public MenuBar(ImageEngine engine){
 		this.engine = engine;
 		buildMenu();
@@ -69,11 +68,11 @@ public class MenuBar extends JMenuBar {
 		file.add(salva);
 		file.add(chiudi);
 		
-	applica = new JMenuItem("Applica effetto...");
+	applica = new JMenuItem("Applica effetti");
 		applica.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				engine.actionPerformed(e);}});
+				engine.applyEffect();}});
 	ricarica = new JMenuItem("Ricarica immagine");
 		ricarica.addActionListener(new ActionListener() {
 			@Override
