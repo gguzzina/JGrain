@@ -10,16 +10,16 @@ import effects.*;
 
 
 /**
- * una classe contenente la sidebar 
+ * Classe che crea la sidebar del programma JGrain.
+ * 
+ * Permette di sceglere gli effetti da aggiungere o eliminare dalla catena,
+ * carica ed elimina sezioni corrispondenti ai vari effetti.
+ *  
  * @author Giulio Guzzinati
- *
  */
 @SuppressWarnings("serial")
 public class Sidebar extends JPanel implements ActionListener{
 
-	/**
-	 * 
-	 */
 	protected JPanel center;
 	protected ImageEngine engine;
 	protected JComboBox combo = new JComboBox();
@@ -39,7 +39,10 @@ public class Sidebar extends JPanel implements ActionListener{
 	}
 	
 	
-	
+	/**
+	 * @param engine l'{@link ImageEngine} a cui la
+	 * sidebar comunica le operazioni da eseguire
+	 */
 	public Sidebar(final ImageEngine engine){
 		//Creo la parte superiore della sidebar
 		JPanel top = new JPanel(new FlowLayout());
@@ -70,14 +73,23 @@ public class Sidebar extends JPanel implements ActionListener{
 		
 	}
 	
-	public void setEffect(effects.ImageEffect effect){
-		remove(center);
-		center = effect.getSidebar();
-		add(center);
-		validate();
-		repaint();
-	}
 	
+//	public void setEffect(effects.ImageEffect effect){
+//		remove(center);
+//		center = effect.getSidebar();
+//		add(center);
+//		validate();
+//		repaint();
+//	}
+	
+	/**Aggiunge alla sidebar la sezione corrispondente ad un {@link ImageEffect}.
+	 * 
+	 * Il contorno e i pulsanti applica ed elimina sono presenti
+	 * in maniera predefinita, il "contenuto" è ottenuto dall'{@link ImageEffect}
+	 * tramite il metodo <code>getSidebar</code>
+	 * 
+	 * @param eft l'effetto da aggiungere
+	 */
 	public void addEffect(ImageEffect eft){
 		int n = (engine.getNum());
 		secs[n] = new Section(eft, engine); 
@@ -86,6 +98,11 @@ public class Sidebar extends JPanel implements ActionListener{
 		repaint();
 	}
 	
+	/**Rimuove dalla sidebar la sezione corrispondete
+	 * ad uno degli {@link ImageEffect} caricati
+	 * 
+	 * @param del l'indice della sezione da eliminare
+	 */
 	public void removeEffect(int del){
 		center.remove(secs[del]);
 	    System.arraycopy(secs,del+1,secs,del,secs.length-1-del);
@@ -97,11 +114,10 @@ public class Sidebar extends JPanel implements ActionListener{
 	}
 
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		int idx = combo.getSelectedIndex();
-		if (idx == 0) {
+			   if (idx == 0) {
 			engine.addEffect(new SobelJAI());
 		} else if (idx == 1) {
 			engine.addEffect(new BinarizeGray());
