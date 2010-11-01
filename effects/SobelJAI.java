@@ -3,7 +3,6 @@
  */
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -41,8 +40,8 @@ public class SobelJAI extends ImageEffect {
 		return this.getRenderedOp(op).getAsBufferedImage();
 	}
 	
-	
-	public JPanel getSidebar(ActionListener al){
+	@Override
+	public JPanel getSidebar(){
 		sidebar = new JPanel();
 		JLabel text = new JLabel(""); 
 		

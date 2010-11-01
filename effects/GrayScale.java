@@ -4,7 +4,6 @@
 package effects;
 
 import java.awt.Graphics;
-import java.awt.event.ActionListener;
 import java.awt.image.*;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -37,7 +36,7 @@ public class GrayScale extends ImageEffect {
 	}
 
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		sidebar = new JPanel();
 		JLabel label = new JLabel("Passa in scala di grigi");
 		sidebar.add(label);

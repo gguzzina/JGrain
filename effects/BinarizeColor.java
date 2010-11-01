@@ -4,7 +4,6 @@
 package effects;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -13,9 +12,12 @@ import javax.media.jai.RenderedOp;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-/**
+/**{@link ImageEffect} che binarizza un'immagine a colore sulla
+ * base di 3 soglie rispettivamente per i canali RGB impostate
+ * nella GUI attraverso 3 {@link JSlider} visualizzati nella
+ * {@link Sidebar} 
+ * 
  * @author Giulio Guzzinati
- *
  */
 public class BinarizeColor extends ImageEffect {
 	JSlider rthresh, gthresh, bthresh;
@@ -46,7 +48,7 @@ public class BinarizeColor extends ImageEffect {
 	 * @see effects.ImageEffect#getSidebar(java.awt.event.ActionListener)
 	 */
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		JPanel sidebar = new JPanel();
 		sidebar.setLayout(new GridLayout(3,1));
 		

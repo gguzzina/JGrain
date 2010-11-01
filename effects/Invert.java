@@ -3,7 +3,6 @@
  */
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -42,7 +41,7 @@ public class Invert extends ImageEffect {
 	 * @see effects.ImageEffect#getSidebar(java.awt.event.ActionListener)
 	 */
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		sidebar = new JPanel();
 		JLabel label = new JLabel("Inverti l'immagine!");
 		sidebar.add(label);

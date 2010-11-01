@@ -14,11 +14,14 @@ import effects.*;
  * 
  * Permette di sceglere gli effetti da aggiungere o eliminare dalla catena,
  * carica ed elimina sezioni corrispondenti ai vari effetti.
+ * 
+ * la selezione degli effetti avviene tramite una {@link JComboBox}
+ * che ottiene i nomi degli effetti tramite il metodo getName degli effetti stessi 
  *  
  * @author Giulio Guzzinati
  */
 @SuppressWarnings("serial")
-public class Sidebar extends JPanel implements ActionListener{
+public class Sidebar extends JPanel{
 
 	protected JPanel center;
 	protected ImageEngine engine;
@@ -47,7 +50,23 @@ public class Sidebar extends JPanel implements ActionListener{
 		//Creo la parte superiore della sidebar
 		JPanel top = new JPanel(new FlowLayout());
 		JButton add = new JButton("+");
-			add.addActionListener(this);
+			add.addActionListener(new ActionListener() {@Override
+				public void actionPerformed(ActionEvent e) {
+					int idx = combo.getSelectedIndex();
+						   if (idx == 0) {
+						engine.addEffect(new SobelJAI());
+					} else if (idx == 1) {
+						engine.addEffect(new BinarizeGray());
+					} else if (idx == 2) {
+						engine.addEffect(new BinarizeColor());
+					} else if (idx == 3) {
+						engine.addEffect(new GrayScale());
+					} else if (idx == 4) {
+						engine.addEffect(new Invert());
+					} else if (idx == 5) {
+						engine.addEffect(new Counter());
+					}
+				}});
 			comboBuild();
 			top.add(combo);
 			top.add(add);
@@ -114,23 +133,8 @@ public class Sidebar extends JPanel implements ActionListener{
 	}
 
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		int idx = combo.getSelectedIndex();
-			   if (idx == 0) {
-			engine.addEffect(new SobelJAI());
-		} else if (idx == 1) {
-			engine.addEffect(new BinarizeGray());
-		} else if (idx == 2) {
-			engine.addEffect(new BinarizeColor());
-		} else if (idx == 3) {
-			engine.addEffect(new GrayScale());
-		} else if (idx == 4) {
-			engine.addEffect(new Invert());
-		} else if (idx == 5) {
-			engine.addEffect(new Counter());
-		}
-	}
+	
+	
 }
 
 	@SuppressWarnings("serial")

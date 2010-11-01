@@ -3,7 +3,6 @@
  */
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -45,7 +44,7 @@ public class BinarizeGray extends ImageEffect {
 	}
 
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		sidebar = new JPanel();
 		
 		threshold = new JSlider(0, 255);

@@ -4,7 +4,6 @@
 package effects;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.image.*;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -81,7 +80,7 @@ public class Counter extends ImageEffect {
 	 * @see effects.ImageEffect#getSidebar(java.awt.event.ActionListener)
 	 */
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		sidebar = new JPanel();		
 		dst = new JSlider(1, 17);
 		dst.setValue(1);
