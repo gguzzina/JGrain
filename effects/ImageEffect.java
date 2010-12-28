@@ -1,4 +1,3 @@
-
 package effects;
 
 import java.awt.image.BufferedImage;

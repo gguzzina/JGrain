@@ -71,20 +71,24 @@ public class Sidebar extends JPanel{
 			top.add(combo);
 			top.add(add);
 		setLayout(new BorderLayout());
-//		JButton applica = new JButton("Applica");
-//		applica.addActionListener(engine);
+		JButton applica = new JButton("Applica");
+		applica.addActionListener(new ActionListener() {@Override
+			public void actionPerformed(ActionEvent arg0) {
+			engine.applyEffects();
+				}});
 		//creo la parte inferiore
-//		JPanel bottom = new JPanel(new GridLayout(2,1));
-//		bottom.add(applica);
+		JPanel bottom = new JPanel();
+		bottom.add(applica);
 //		bottom.add(new JPanel());
 		//creo il centro, vuoto, inizializzo le sezioni
 		center = new JPanel();
 //		center.setMaximumSize(new Dimension(240, 800));
-		center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+		BoxLayout layout = new BoxLayout(center, BoxLayout.Y_AXIS);
+		center.setLayout(layout);
 		JScrollPane pane = new JScrollPane(center);
 		pane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		//aggiungo tutto
-//		add(bottom, BorderLayout.SOUTH);
+		add(bottom, BorderLayout.SOUTH);
 		add(top, BorderLayout.NORTH);
 		add(pane);
 		this.engine = engine;
@@ -93,18 +97,12 @@ public class Sidebar extends JPanel{
 	}
 	
 	
-//	public void setEffect(effects.ImageEffect effect){
-//		remove(center);
-//		center = effect.getSidebar();
-//		add(center);
-//		validate();
-//		repaint();
-//	}
 	
 	/**Aggiunge alla sidebar la sezione corrispondente ad un {@link ImageEffect}.
 	 * 
-	 * Il contorno e i pulsanti applica ed elimina sono presenti
-	 * in maniera predefinita, il "contenuto" è ottenuto dall'{@link ImageEffect}
+	 * Il contorno e i pulsanti <code>applica</code> ed <code>elimina</code>
+	 * sono presenti in maniera predefinita, il "contenuto"
+	 * è ottenuto dall'{@link ImageEffect}
 	 * tramite il metodo <code>getSidebar</code>
 	 * 
 	 * @param eft l'effetto da aggiungere
@@ -131,10 +129,6 @@ public class Sidebar extends JPanel{
 		validate();
 		repaint();
 	}
-
-
-	
-	
 }
 
 	@SuppressWarnings("serial")
@@ -161,6 +155,7 @@ public class Sidebar extends JPanel{
 			south.add(rmv);
 			add(south, BorderLayout.SOUTH);
 			add(eft.getSidebar());
+			this.setMaximumSize(new Dimension(Integer.MAX_VALUE, (int) this.getMinimumSize().getHeight()));
 		}
 		
 		public void setN(int n){

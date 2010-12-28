@@ -15,7 +15,7 @@ import javax.swing.border.TitledBorder;
 /**{@link ImageEffect} che binarizza un'immagine a colore sulla
  * base di 3 soglie rispettivamente per i canali RGB impostate
  * nella GUI attraverso 3 {@link JSlider} visualizzati nella
- * {@link Sidebar} 
+ * {@link Sidebar}
  * 
  * @author Giulio Guzzinati
  */
@@ -24,7 +24,7 @@ public class BinarizeColor extends ImageEffect {
 	String name = "Monocromatizza";
 	
 	
-	/* (non-Javadoc)
+	/*
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
 	@Override
@@ -40,11 +40,17 @@ public class BinarizeColor extends ImageEffect {
 			}
 		}
 		
+		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
+			    BufferedImage.TYPE_BYTE_BINARY);  
+			Graphics g = image.getGraphics();  
+			g.drawImage(img, 0, 0, null);  
+			g.dispose();
+		img = image;
 		
 		return img;
 	}
 
-	/* (non-Javadoc)
+	/* 
 	 * @see effects.ImageEffect#getSidebar(java.awt.event.ActionListener)
 	 */
 	@Override
@@ -73,14 +79,16 @@ public class BinarizeColor extends ImageEffect {
 
 		return sidebar;
 	}
-
+	
+	
 	@Override
 	public String getName() {
-		return "Monocromatizza";
+		return "Binarizza, colori";
 	}
-
+	
+	
 	@Override
-	public RenderedOp getRenderedOp(RenderedOp op) {
+	protected RenderedOp getRenderedOp(RenderedOp op) {
 		ParameterBlock pb = new ParameterBlock();
 		BufferedImage img = op.getAsBufferedImage();
 		pb.addSource(getBufferedImage(img));

@@ -11,7 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-/**
+/**{@link ImageEffect} pensato per evidenziare la presenza di bordi nell'immagine.
+ * Esegue in realtà una mappa dell'intensità dei gradienti di colore sull'immagine.
+ * 
  * @author skarn
  *
  */
@@ -21,8 +23,9 @@ public class SobelJAI extends ImageEffect {
 	 */
 	public SobelJAI() {
 	}
-
-	public RenderedOp getRenderedOp(RenderedOp op) {
+	
+	@Override
+	protected RenderedOp getRenderedOp(RenderedOp op) {
 		KernelJAI sobelVertKernel = KernelJAI.GRADIENT_MASK_SOBEL_VERTICAL;
 		KernelJAI sobelHorizKernel = KernelJAI.GRADIENT_MASK_SOBEL_HORIZONTAL;
 		ParameterBlock pb = new ParameterBlock();

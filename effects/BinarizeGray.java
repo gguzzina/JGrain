@@ -1,6 +1,3 @@
-/**
- * 
- */
 package effects;
 
 import java.awt.image.BufferedImage;
@@ -12,21 +9,20 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
-/**
+/**{@link ImageEffect} che binarizza un'immagine in scala di grigi sulla
+ * base di un valore di soglia impostato
+ * nella GUI attraverso 1 {@link JSlider} visualizzato nella
+ * {@link Sidebar}
  * @author Giulio Guzzinati
- *
  */
 public class BinarizeGray extends ImageEffect {
 	protected JSlider threshold;
 
-	/**
-	 * 
-	 */
 
-	/* (non-Javadoc)
+	/* 
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
-	public RenderedOp getRenderedOp(RenderedOp op){
+	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(op);
 		pb.add((double)threshold.getValue());

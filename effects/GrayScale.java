@@ -1,6 +1,3 @@
-/**
- * 
- */
 package effects;
 
 import java.awt.Graphics;
@@ -10,7 +7,11 @@ import java.awt.image.renderable.ParameterBlock;
 import javax.media.jai.*;
 import javax.swing.*;
 
-/**
+/**Converte l'immagine a colori in un'immagine in scala di grigi,
+ * compreso un cambio dello spazio di colori.
+ * Questo può essere utile nel caso l'immagine sia già costituita da toni di grigio,
+ * ma utilizzi uno spazio di colori RGB, per cambiare spazio di colori.
+ * 
  * @author Giulio Guzzinati
  *
  */
@@ -19,7 +20,7 @@ public class GrayScale extends ImageEffect {
 
 
 	
-	public RenderedOp getRenderedOp(RenderedOp op){
+	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(getBufferedImage(op.getAsBufferedImage()));
 		return JAI.create("absolute", pb);
