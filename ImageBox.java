@@ -1,5 +1,7 @@
 import java.awt.*;
 //import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -41,58 +43,89 @@ public class ImageBox extends JPanel {
 	protected Dimension dim;
 	protected JPanel toolbar;
 	protected JTextField zm = new JTextField(3);
+	private ImageEngine engine;
 	
-//	/**
-//	 * metodo privato che inizializza la toolbar per lo zoom,
-//	 * con 3 {@link JButton} per zoom in, zoom out e per reimpostare lo zoom a 1,
-//	 * e un <code>JTextField</code> che mostra il fattore di zoom percentuale
-//	 * L'operazione di effettivo zoom è effettuata dal metodo <code>zoom</code>
-//	 * 
-//	 * @return la toolbar creata
-//	 */
-//	private JPanel toolbar(){
-//		JPanel tb = new JPanel();
-//		tb.setBorder(BorderFactory.createCompoundBorder(
-//				BorderFactory.createLineBorder(getBackground()),
-//				BorderFactory.createLineBorder(Color.GRAY)));
-//		tb.setLayout(new FlowLayout(FlowLayout.LEFT));
-//		
-//		JButton open = new JButton("Apri");
-//		open.setToolTipText("Apri File ([crtl]+[o])");
-//		//open.setAcc
-//		
-//		JButton save = new JButton("Salva");
-//		save.setToolTipText("Salva File ([crtl]+[s])");
-//		
-//		JButton zmin = new JButton("Z+");
-//		zmin.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				zoom(0.1);}});
-//		
-//		JButton zmout = new JButton("Z-");
-//		zmout.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				zoom(-0.1);}});
-//		
-//		JButton zm0 = new JButton("Z=1");
-//		zm0.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				zoomReset();}});
-//		
-//		
-//		zm.setEditable(false);
-//		
-//		tb.add(open);
-//		tb.add(save);
-//		tb.add(zmin);
-//		tb.add(zmout);
-//		tb.add(zm);
-//		tb.add(zm0);
-//		return tb;
-//	}
+	/**
+	 * metodo privato che inizializza la toolbar per lo zoom,
+	 * con 3 {@link JButton} per zoom in, zoom out e per reimpostare lo zoom a 1,
+	 * e un <code>JTextField</code> che mostra il fattore di zoom percentuale
+	 * L'operazione di effettivo zoom è effettuata dal metodo <code>zoom</code>
+	 * 
+	 * @return la toolbar creata
+	 */
+	private JPanel toolbar(){
+				
+		JButton open = new JButton("A");
+		open.setToolTipText("Apri File... [crtl]+[o]");
+		open.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				engine.openImage();
+			}});
+		
+		JButton save = new JButton("S");
+		save.setToolTipText("Salva File... [crtl]+[s]");
+		save.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				engine.saveImage();
+			}});
+		
+		JButton batch = new JButton("B");
+		batch.setToolTipText("Applica a molti file... [ctrl]+[b]");
+		batch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				engine.batchProcess();
+			}});
+		
+		JButton zmin = new JButton("Z+");
+		zmin.setToolTipText("Aumenta lo zoom [ctrl]+[.]");
+		zmin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoom(0.1);}});
+		
+		JButton zmout = new JButton("Z-");
+		zmout.setToolTipText("Riduci lo zoom [ctrl]+[,]");
+		zmout.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoom(-0.1);}});
+		
+		JButton zm0 = new JButton("Z=1");
+		zm0.setToolTipText("[ctrl]+[=]");
+		zm0.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomReset();}});
+		
+		
+		zm.setEditable(false);
+		
+		JPanel tb = new JPanel();
+		tb.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createLineBorder(getBackground()),
+				BorderFactory.createLineBorder(Color.GRAY)));
+		tb.setLayout(new BorderLayout());
+		
+		JPanel left = new JPanel();
+		left.add(open);
+		left.add(save);
+		left.add(batch);
+		
+		JPanel right = new JPanel();
+		right.add(zmin);
+		right.add(zmout);
+		right.add(zm);
+		right.add(zm0);
+		
+		tb.add(left, BorderLayout.WEST);
+		tb.add(right, BorderLayout.EAST);
+		
+		
+		return tb;
+	}
 	
 	/**
 	 * crea l'oggetto, inizializzando tutti i componenti dell'interfaccia,
@@ -102,11 +135,11 @@ public class ImageBox extends JPanel {
 	public ImageBox(){
 		setLayout(new BorderLayout());
 		display = new DisplayJAI();
-//		toolbar = toolbar();
+		toolbar = toolbar();
 		display.setAutoscrolls(true);
 		pane = new JScrollPane(display);
 		
-//		add(toolbar, BorderLayout.NORTH);
+		add(toolbar, BorderLayout.NORTH);
 		JViewport viewp = pane.getViewport();
 		viewp.setLayout(new BoxLayout(viewp, BoxLayout.Y_AXIS));
 		pane.getVerticalScrollBar().setUnitIncrement(10);
@@ -176,4 +209,9 @@ public class ImageBox extends JPanel {
 		zoom=1;
 		zoom(0);
 	}
+	
+	public void engine(ImageEngine engine){
+		this.engine = engine;
+	}
+	
 }

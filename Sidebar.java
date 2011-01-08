@@ -74,7 +74,7 @@ public class Sidebar extends JPanel{
 		JButton applica = new JButton("Applica");
 		applica.addActionListener(new ActionListener() {@Override
 			public void actionPerformed(ActionEvent arg0) {
-			engine.applyEffects();
+			engine.chooseEffect();
 				}});
 		//creo la parte inferiore
 		JPanel bottom = new JPanel();

@@ -34,11 +34,13 @@ public class Counter extends ImageEffect {
 								Color.LIGHT_GRAY,Color.MAGENTA,Color.ORANGE,
 								Color.PINK,Color.YELLOW,Color.DARK_GRAY,
 								new Color(115, 0, 85)};
-	protected Color[] clrsFalse = {Color.WHITE};
+	protected Color[] clrsFalseFalse = {Color.BLACK};
+	protected Color[] clrsFalseTrue = {Color.WHITE};
 	protected Color[] clrs;
+	protected Color backGdClr;
 	protected JSlider dst;
-	protected boolean chbSelected = false;
-	protected JCheckBox chb;
+	protected boolean chbColor = false, chbDark = false;
+	protected JCheckBox chb1, chb2;
 	
 	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
@@ -63,11 +65,17 @@ public class Counter extends ImageEffect {
 			g.dispose();
 		img = image;}
 		
-		if (chbSelected == false) {
-			clrs = clrsFalse;
-		}else if (chbSelected == true){
+		if (chbColor == false && chbDark == true) {
+			clrs = clrsFalseTrue;
+		}else if (chbColor == false && chbDark == false) {
+			clrs = clrsFalseFalse;
+		}else if (chbColor == true){
 			clrs = clrsTrue;
 		}
+		
+		if (chbDark == true) {
+			backGdClr = Color.BLACK;
+		} else {backGdClr =  Color.WHITE;}
 		
 		numpart = 0;
 		w = img.getWidth();
@@ -79,7 +87,7 @@ public class Counter extends ImageEffect {
 		for (int x = srcw; x < w-srcw; x++) { for (int y = srcw; y < h-srcw; y++) {
 			int col = img.getRGB(x, y);
 //			System.out.println("applycol"+col);
-			if (col > -100){
+			if (col != backGdClr.getRGB()){
 				Point thisp = new Point(x,y);
 			if ( bklist[x][y] == false){
 //				bklist[x][y] = true;
@@ -116,13 +124,23 @@ public class Counter extends ImageEffect {
 		dst.setPaintLabels(true);
 		dst.setMajorTickSpacing(4);
 		dst.setMinorTickSpacing(2);
-//		sidebar.add(dst);
+		/*sidebar.add(dst);*/
 		
-		chb = new JCheckBox("Colora le particelle", chbSelected);
-		chb.addItemListener(new ItemListener() {@Override
+		chb1 = new JCheckBox("Colora le particelle", chbColor);
+		chb1.addItemListener(new ItemListener() {@Override
 			public void itemStateChanged(ItemEvent arg0) {
-			chbSelected = !chbSelected;}});
-		sidebar.add(chb);
+			chbColor = !chbColor;}});
+		
+		chb2 = new JCheckBox("Sfondo scuro", chbDark);
+		chb2.addItemListener(new ItemListener() {@Override
+			public void itemStateChanged(ItemEvent arg0) {
+			chbDark = !chbDark;}});
+		
+		JPanel box = new JPanel();
+		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS)); 
+		box.add(chb1);
+		box.add(chb2);
+		sidebar.add(box);
 		
 		return sidebar;
 	}
@@ -137,19 +155,25 @@ public class Counter extends ImageEffect {
 		return "L'immagine non è binaria";
 		}
 	
+	@Override
+	public String getLogMessage(){
+		return ("Contate " + numpart + " particelle");
+	}
+	
+	
 	Point[] scanAround(Point p, BufferedImage img){
 		int x = (int) p.getX();
 		int y = (int) p.getY();
 		int col;
 		Point[] nxtpoints = new Point[(int) Math.pow((3*srcw+3),2)];
 		int numnxtp = 0;
-		for (int i = x-srcw; i <= x+srcw ; i++) {for (int j = y-srcw; j <= y+srcw; j++) {
+		for (int i = x-srcw; i <= x+srcw; i++){for (int j = y-srcw; j <= y+srcw; j++){
 //			System.out.println(i+","+j);
 			if (i >= 0 && j >= 0 && i < w && j < h){
 				col = img.getRGB(i,j);
 //			System.out.println("scancol"+col);
 			Point thisp = new Point(i,j);
-			if (col > -100 && bklist[i][j] == false) {
+			if (col != backGdClr.getRGB() && bklist[i][j] == false) {
 					img.setRGB(i, j, clrs[numpart%clrs.length].getRGB());
 					bklist[i][j] = true;
 					nxtpoints[numnxtp]= thisp;

@@ -2,7 +2,6 @@ import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
 
 import javax.swing.*;
 
@@ -43,24 +42,14 @@ public class MenuBar extends JMenuBar {
 		apri.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				fc.setCurrentDirectory(engine.getFile().getParentFile());
-				int returnVal = fc.showOpenDialog(null);
-	            if (returnVal == JFileChooser.APPROVE_OPTION) {
-	                File file = fc.getSelectedFile();
-	                engine.openImage(file);}}});
+				engine.openImage();}});
 		
 	salva = new JMenuItem("Salva");
 		salva.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
 		salva.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				fc.setCurrentDirectory(engine.getFile().getParentFile());
-				int returnVal = fc.showSaveDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					engine.saveImage(file);}}});
+				engine.saveImage();}});
 		
 	chiudi = new JMenuItem("Chiudi");
 		chiudi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
@@ -78,7 +67,7 @@ public class MenuBar extends JMenuBar {
 		applica.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				engine.applyEffects();}});
+				engine.chooseEffect();}});
 		
 	ricarica = new JMenuItem("Ricarica immagine");
 		ricarica.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK));
@@ -92,39 +81,22 @@ public class MenuBar extends JMenuBar {
 		batch.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fc1 = new JFileChooser();
-				fc1.setCurrentDirectory(engine.getFile().getParentFile());
-				fc1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fc1.setDialogTitle("Cartella sorgente");
-				int returnVal1 = fc1.showOpenDialog(null);
-	            if (returnVal1 == JFileChooser.APPROVE_OPTION) {
-	                File dir1 = fc1.getSelectedFile();
-	                	JFileChooser fc2 = new JFileChooser();
-	                	fc2.setCurrentDirectory(engine.getFile().getParentFile());
-	                	fc2.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-	                	fc2.setDialogTitle("Cartella di destinazione");
-	                	int returnVal2 = fc2.showOpenDialog(null);
-	                	if (returnVal2 == JFileChooser.APPROVE_OPTION) {
-	                		File dir2 = fc2.getSelectedFile();
-	                		engine.batchProcess(dir1 ,dir2);
-	                	}
-	                }
-	            }
-			});
+				engine.batchProcess();
+	                	}});
 		
 		modifica.add(applica);
 		modifica.add(ricarica);
 		modifica.add(batch);
 		
 		zin = new JMenuItem("Zoom +");
-			zin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, Event.CTRL_MASK));
+			zin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Event.CTRL_MASK));
 			zin.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					engine.zoom(0.1);}});
 		
 		zout = new JMenuItem("Zoom -");
-			zout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, Event.CTRL_MASK));
+			zout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Event.CTRL_MASK));
 			zout.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

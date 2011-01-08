@@ -1,12 +1,19 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.*;
 import java.io.*;
 import java.net.URISyntaxException;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 import effects.*;
 
@@ -22,6 +29,8 @@ import effects.*;
  * Si legga in particolare del metodo <code>ChainBuild</code>.
  * 
  * 
+ * 
+ * 
  *
  * @author Giulio Guzzinati 
  * 
@@ -32,7 +41,7 @@ public class ImageEngine /*implements ActionListener*/{
 	/** il numero di {@link ImageEffect} attualmente caricati
 	 */
 	protected int neft = 0;
-	protected boolean testing = true;
+	protected boolean testing = false;
 	
 	/**Il vettore contenente gli {@link ImageEffect} da applicare alle immagini.
 	 * La dimensione del vettore è fissata a 10,
@@ -43,6 +52,7 @@ public class ImageEngine /*implements ActionListener*/{
 	protected Sidebar sidebar;
 	protected JFrame frame;
 	protected File file = new File("~");
+	protected File dir1, dir2;
 	protected ImageBox box;
 	
 	protected BufferedImage dummy = new BufferedImage(500, 400, BufferedImage.TYPE_INT_ARGB );
@@ -52,6 +62,11 @@ public class ImageEngine /*implements ActionListener*/{
 						g.dispose();}
 	
 	protected BufferedImage[] imglist = new BufferedImage[10];
+	protected boolean batch = false;
+	
+	Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME); 
+
+	
 	
 	/**
 	 * Crea un ImageEngine che visualizza le immagini generate
@@ -65,13 +80,18 @@ public class ImageEngine /*implements ActionListener*/{
 		if (testing == true){try { file = new File(this.getClass().getResource("files/Cell_Colony.jpg").toURI());
 		} catch (URISyntaxException e1) { e1.printStackTrace(); }
 		{try {	imglist[0] = ImageIO.read(file);	} catch (IOException e) {System.out.println("errore!!");}}}
+		
 		if (testing==false) {imglist[0] = new BufferedImage(500, 400, BufferedImage.TYPE_INT_ARGB );}
 		Graphics2D g = imglist[0].createGraphics();
 		g.setColor(new Color ( 0, 0, 0, 0 ));
 		g.fillRect(0, 0, 500, 400);
 		g.dispose();
 		box = imgbx;
+		box.engine(this);
 		box.set(imglist[0]);
+		
+		log.addHandler(new ConsoleHandler());
+		
 	}
 	
 	/**
@@ -82,69 +102,176 @@ public class ImageEngine /*implements ActionListener*/{
 	public void openImage(File fl){
 		file = fl;
 		try {
-			imglist[0] = ImageIO.read(file); 
+			imglist[0] = ImageIO.read(file);
+			log.log(new LogRecord(Level.INFO, "apro " + fl.toString()));
 		} catch (IOException e) {
-			showError("Impossibile aprire il file "+fl.getName() + "forse non è un'immagine?");
-			}
+			String s = ("Impossibile aprire il file "+fl.getName() + "forse non è un'immagine?");
+			log.log(new LogRecord(Level.SEVERE, s));
+			if (batch==false){ showError(s);}
+		}
 		box.set(imglist[0]);
 	}
+	
+	/**carica l'immagine contenuta in un file esterno, che viene selezionato
+	 * dall'utente attraverso un {@link JFileChooser}
+	 */
+	public void openImage(){
+		JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(getFile().getParentFile());
+		int returnVal = fc.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+        File file = fc.getSelectedFile();
+        openImage(file);}
+    }
 	
 	/**
 	 * salva l'ultima modifica dell'immagine in un
 	 * {@link File} in formato <code>jpeg</code>
 	 * 
-	 * @param fl il {@link File} da caricare
+	 * @param fl il {@link File} da salvare
 	 */
 	public void saveImage(File fl){
 		try {
 			ImageIO.write(imglist[neft], "jpeg", fl);
+			log.log(new LogRecord(Level.INFO, "salvo " + fl.toString()));
 		} catch (IOException e) {
-			showError("Impossibile salvare il file");
+			String s = "Impossibile salvare il file";
+			log.log(new LogRecord(Level.INFO, s));
+			if (batch==false) {showError(s);}
 			e.printStackTrace();
 		}
 	}
 	
+	/** 
+	 * salva l'ultima modifica dell'immagine  in formato <code>jpeg</code> in un
+	 * {@link File} esterno che viene selezionato
+	 * dall'utente attraverso un {@link JFileChooser}
+	 */
+	public void saveImage(){
+		JFileChooser fc = new JFileChooser();
+		fc.setCurrentDirectory(getFile().getParentFile());
+		int returnVal = fc.showSaveDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			saveImage(file);}
+	}
+	
+	
 	/**Controlla una cartella e applica le gli effetti selezionati
-	 * a tutti i file contenuti.
-	 * Nella seconda cartella include un file di log 
+	 * a tutti i file contenuti, salvando le immagini risultanti in una
+	 * seconda cartella. Nella seconda cartella include un file di log 
 	 * 
 	 * @param dir1  la cartella dei file sorgente
 	 * @param dir2  la cartella in cui salvare i file
 	 */
 	public void batchProcess(File dir1, File dir2){
-		File[] files = dir1.listFiles(); //array dei contenuti di dir1
-		//Creo il file di log, il logger e il file handler 
+		batch = true;
+		File[] files = dir1.listFiles();//array dei contenuti di dir1
+		//Creo il file di log, il file handler, e lo aggiungo al logger.
 		File logFile = new File(dir2, "log.txt");
-		Logger log = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME); 
-		
-		try{
-			log.addHandler(new FileHandler(logFile.toString(), false));
-		} catch (IOException e) {
-			//TODO: gestire l'eccezione 
+		FileHandler hnd = null;
+		try {
+			hnd = new FileHandler(logFile.toString(), false);
+			hnd.setFormatter(new SimpleFormatter());
+			log.addHandler(hnd);
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		
 		
 		for (File fl : files) {
-			System.out.println("apro" + fl.toString());
 			//carica un'immagine ed applica gli effetti attivi
 			openImage(fl);
-			//TODO: loggare l'apertura
-			reload();
-			applyEffects();
+			//reload();
+			chooseEffect();
 			//salva il file
 			File newFl = new File(dir2, "mod_" + fl.getName());
-			System.out.println(newFl.toString());
-			update();
-			     try {
-					  Thread.currentThread();
-					  Thread.sleep(1000);
-			       }
-			     catch (InterruptedException e) {
-			       e.printStackTrace();
-			       }
 			saveImage(newFl);
 		}
+		
+		hnd.close();
+		log.removeHandler(hnd);
+		batch = false;
 	}
+	
+	/** Controlla una cartella e applica le gli effetti selezionati
+	 * a tutti i file contenuti, salvando le immagini risultanti in una
+	 * seconda cartella. Nella seconda cartella include un file di log
+	 * 
+	 * Interroga l'utente attraverso una finestra di dialogo modale su
+	 * quali cartelle utilizzare
+	 * 
+	 */
+	public void batchProcess(){
+		JPanel pn = new JPanel();
+		pn.setLayout(new BoxLayout(pn, BoxLayout.PAGE_AXIS));
+		
+		dir1 = getFile().getParentFile();
+		dir2 = getFile().getParentFile();
+		
+		//creo il primo campo di testo
+		JPanel pn1 = new JPanel();
+		Border bd1 = BorderFactory.createTitledBorder("Cartella di origine");
+		final JTextField tf1 = new JTextField(getFile().toString(), 40);
+		tf1.setEditable(false);
+		
+		//creo il bottone sfoglia per il primo campo,
+		//con actionlistener e JFileChooser
+		JButton btn1 = new JButton("Sfoglia...");
+		btn1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc1 = new JFileChooser();
+				fc1.setCurrentDirectory(getFile().getParentFile());
+				fc1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				fc1.setDialogTitle("Cartella sorgente");
+				int returnVal1 = fc1.showOpenDialog(null);
+		        if (returnVal1 == JFileChooser.APPROVE_OPTION) {
+		            dir1 = fc1.getSelectedFile();
+		            tf1.setText(dir1.toString());}
+			}
+		});
+		//creo il secondo campo di testo, bordo
+		JPanel pn2 = new JPanel();
+		Border bd2 = BorderFactory.createTitledBorder("Cartella di destinazione");
+		final JTextField tf2 = new JTextField(getFile().toString(), 40);
+		tf2.setEditable(false);
+		
+		//creo il bottone sfoglia per il secondo campo,
+		//con actionlistener e JFileChooser
+		JButton btn2 = new JButton("Sfoglia...");
+		btn2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc2 = new JFileChooser();
+		        fc2.setCurrentDirectory(getFile().getParentFile());
+		        fc2.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        fc2.setDialogTitle("Cartella di destinazione");
+		        int returnVal2 = fc2.showOpenDialog(null);
+		        if (returnVal2 == JFileChooser.APPROVE_OPTION) {
+		        	dir2 = fc2.getSelectedFile();
+		        	tf2.setText(dir2.toString());}
+			}});
+		
+		//aggiungo tutto a tutto...
+		pn1.add(tf1);
+		pn1.add(btn1);
+		pn1.setBorder(bd1);
+		
+		pn2.add(tf2);
+		pn2.add(btn2);
+		pn2.setBorder(bd2);
+		
+		pn.add(pn1);
+		pn.add(pn2);
+		
+		// il metodo chiamato, restituisce lo stesso oggetto pn che gli ho dato io
+		// in caso di conferma, altrimenti un null
+		Object o = JOptionPane.showInputDialog(frame, pn, "Applica a molti file...", JOptionPane.QUESTION_MESSAGE);
+		if (o != null) {batchProcess(dir1 ,dir2);}
+		
+	}
+	
+	
 	
 	/**
 	 * ridisegna l'immagine per riflettere eventuali cambiamenti
@@ -191,7 +318,7 @@ public class ImageEngine /*implements ActionListener*/{
 	/**
 	 * applica tutti gli effetti caricati all'immagine
 	 */
-	public void applyEffects(){
+	public void chooseEffect(){
 		chooseEffect(neft-1);
 	}
 	
@@ -246,13 +373,20 @@ public class ImageEngine /*implements ActionListener*/{
 	 * @param n numero degli elementi da ricreare
 	 */
 	public void chainBuild(int n){
-		reload();
-		imglist[0] = imglist[0];
+		//reload();
+		//imglist[0] = imglist[0];
 		for (int j = 0; j < n; j++) {
 			try {	imglist[j+1] = eftlist[j].getBufferedImage(imglist[j]); 
+					if (eftlist[j].getLogMessage() != null){
+						// se l'effetto prevede un messaggio informativo, loggarlo 
+						log.log(new LogRecord(Level.INFO, eftlist[j].getLogMessage()));
+						}
 			} catch (IllegalArgumentException e) {
+				//loggare, e nel caso mostrare in popup, un eventuale errore
 				imglist[j+1] = imglist[0];
-				showError(eftlist[j].getArgumentError());
+				String s = eftlist[j].getArgumentError();
+				log.log(new LogRecord(Level.SEVERE, s));
+				if (batch==false) {showError(s);}
 			}}
 		box.set(imglist[n]);
 	}

@@ -53,4 +53,12 @@ public abstract class ImageEffect {
 	public String getArgumentError(){
 		return "Errore, argomento non valido";
 	}
+	
+	
+	/**
+	 * @return un messaggio informativo sull'esito dell'applicazione dell'effetto.
+	 */
+	public String getLogMessage(){
+	return null;
+	}
 }

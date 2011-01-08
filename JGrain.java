@@ -22,7 +22,7 @@ public class JGrain {
 	} 
 	
 	public static void main(String[] args) {
-		boolean testing = true;
+		boolean testing = false;
 		JFrame mainWin = new JFrame("JGrain");
 		Container mainCont = mainWin.getContentPane();
 		ImageBox box = new ImageBox();
