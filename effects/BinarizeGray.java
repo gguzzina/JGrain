@@ -1,9 +1,5 @@
-/**
- * 
- */
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -13,21 +9,20 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.border.TitledBorder;
 
-/**
+/**{@link ImageEffect} che binarizza un'immagine in scala di grigi sulla
+ * base di un valore di soglia impostato
+ * nella GUI attraverso 1 {@link JSlider} visualizzato nella
+ * {@link Sidebar}
  * @author Giulio Guzzinati
- *
  */
-public class MonochromeJAI extends ImageEffect {
+public class BinarizeGray extends ImageEffect {
 	protected JSlider threshold;
 
-	/**
-	 * 
-	 */
 
-	/* (non-Javadoc)
+	/* 
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
-	public RenderedOp applyEffectJAI(RenderedOp op){
+	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(op);
 		pb.add((double)threshold.getValue());
@@ -35,17 +30,17 @@ public class MonochromeJAI extends ImageEffect {
 	}
 	
 	@Override
-	public BufferedImage applyEffect(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) {
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(img);
 		RenderedOp op = JAI.create("addconst", pb);
-		op = applyEffectJAI(op);
+		op = getRenderedOp(op);
 		img = op.getAsBufferedImage();
 		return img;
 	}
 
 	@Override
-	public JPanel getSidebar(ActionListener engine) {
+	public JPanel getSidebar() {
 		sidebar = new JPanel();
 		
 		threshold = new JSlider(0, 255);
@@ -60,7 +55,12 @@ public class MonochromeJAI extends ImageEffect {
 
 	@Override
 	public String getName() {
-		return "Monocromatizza";
+		return "Binarizza, scala di grigi";
+	}
+	
+	@Override
+	public String getArgumentError() {
+		return "Questo effetto lavora su immagini in scala di grigi,\n converti l'immagine o utilizza l'effetto 'Binarizza, Colore'"; 	
 	}
 	
 }

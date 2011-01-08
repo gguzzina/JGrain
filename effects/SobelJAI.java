@@ -3,7 +3,6 @@
  */
 package effects;
 
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
 
@@ -12,7 +11,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-/**
+/**{@link ImageEffect} pensato per evidenziare la presenza di bordi nell'immagine.
+ * Esegue in realtà una mappa dell'intensità dei gradienti di colore sull'immagine.
+ * 
  * @author skarn
  *
  */
@@ -22,8 +23,9 @@ public class SobelJAI extends ImageEffect {
 	 */
 	public SobelJAI() {
 	}
-
-	public RenderedOp applyEffectJAI(RenderedOp op) {
+	
+	@Override
+	protected RenderedOp getRenderedOp(RenderedOp op) {
 		KernelJAI sobelVertKernel = KernelJAI.GRADIENT_MASK_SOBEL_VERTICAL;
 		KernelJAI sobelHorizKernel = KernelJAI.GRADIENT_MASK_SOBEL_HORIZONTAL;
 		ParameterBlock pb = new ParameterBlock();
@@ -34,20 +36,15 @@ public class SobelJAI extends ImageEffect {
 		}
 	
 	@Override
-	public BufferedImage applyEffect(BufferedImage img){
+	public BufferedImage getBufferedImage(BufferedImage img){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(img);
-		double[] cost = new double[1];
-		cost[0] = 0;
-		pb.add(cost);
 		RenderedOp op = JAI.create("addconst", pb);
-		op = this.applyEffectJAI(op);
-		img = op.getAsBufferedImage();
-		return img;
+		return this.getRenderedOp(op).getAsBufferedImage();
 	}
 	
-	
-	public JPanel getSidebar(ActionListener al){
+	@Override
+	public JPanel getSidebar(){
 		sidebar = new JPanel();
 		JLabel text = new JLabel(""); 
 		

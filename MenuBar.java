@@ -1,28 +1,27 @@
+import java.awt.Event;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-/**
- * 
- */
 
 /**
+ * Una classe contenente una menubar per il programma JGrain
  * @author Giulio Guzzinati
- *
  */
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
 	
-	JMenu file, modifica, visualizza, preferenze;
-	JMenuItem apri, salva, chiudi;
-	JMenuItem ricarica, applica;
-	JMenuItem zoom0;
-	JMenuItem configura;
-	ImageEngine engine;
+	protected JMenu file, modifica, zoom;
+	protected JMenuItem apri, salva, chiudi;
+	protected JMenuItem ricarica, applica, batch;
+	protected JMenuItem zin, zout, z0;
+	protected ImageEngine engine;
 	
-	
+	/**
+	 * @param engine l'{@link ImageEngine} a cui far compiere le operazioni
+	 */
 	public MenuBar(ImageEngine engine){
 		this.engine = engine;
 		buildMenu();
@@ -32,25 +31,28 @@ public class MenuBar extends JMenuBar {
 	
 	file = new JMenu("File");
 	modifica = new JMenu("Modifica");
-	visualizza = new JMenu("Visualizza");
-	preferenze = new JMenu("Preferenze");
+	zoom = new JMenu("Zoom");
 		this.add(file);
 		this.add(modifica);
-		this.add(visualizza);
-		this.add(preferenze);
+		this.add(zoom);
 		
 		
 	apri = new JMenuItem("Apri");
+		apri.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Event.CTRL_MASK));
 		apri.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				int returnVal = fc.showOpenDialog(null);
-	            if (returnVal == JFileChooser.APPROVE_OPTION) {
-	                File file = fc.getSelectedFile();
-	                engine.openImage(file);}}});
+				engine.openImage();}});
+		
 	salva = new JMenuItem("Salva");
+		salva.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK));
+		salva.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				engine.saveImage();}});
+		
 	chiudi = new JMenuItem("Chiudi");
+		chiudi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK));
 		chiudi.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -59,18 +61,57 @@ public class MenuBar extends JMenuBar {
 		file.add(salva);
 		file.add(chiudi);
 		
-	applica = new JMenuItem("Applica effetto...");
+		
+	applica = new JMenuItem("Applica effetti");
+		applica.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK));
 		applica.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				engine.actionPerformed(e);}});
+				engine.chooseEffect();}});
+		
 	ricarica = new JMenuItem("Ricarica immagine");
+		ricarica.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK));
 		ricarica.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				engine.reload();}});
+		
+	batch = new JMenuItem("Applica a molti file...");
+		batch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK));
+		batch.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				engine.batchProcess();
+	                	}});
+		
 		modifica.add(applica);
 		modifica.add(ricarica);
+		modifica.add(batch);
+		
+		zin = new JMenuItem("Zoom +");
+			zin.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Event.CTRL_MASK));
+			zin.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					engine.zoom(0.1);}});
+		
+		zout = new JMenuItem("Zoom -");
+			zout.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Event.CTRL_MASK));
+			zout.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					engine.zoom(-0.1);}});
+		
+		z0 = new JMenuItem("Zoom 100%");
+			z0.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Event.CTRL_MASK));
+			z0.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					engine.zoomReset();}});
+		 
+		zoom.add(zin);
+		zoom.add(zout);
+		zoom.add(z0);
 	}
 }
 	
