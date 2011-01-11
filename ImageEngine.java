@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+import java.util.logging.XMLFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -160,19 +161,29 @@ public class ImageEngine /*implements ActionListener*/{
 	/**Controlla una cartella e applica le gli effetti selezionati
 	 * a tutti i file contenuti, salvando le immagini risultanti in una
 	 * seconda cartella. Nella seconda cartella include un file di log 
+	 * nel formato indicato (txt o xml)
 	 * 
 	 * @param dir1  la cartella dei file sorgente
 	 * @param dir2  la cartella in cui salvare i file
+	 * @param logType il formato del log, le opzioni
+	 * valide sono <code>"txt"</code> e <code>"xml"</code>
 	 */
-	public void batchProcess(File dir1, File dir2){
+	public void batchProcess(File dir1, File dir2, String logType){
 		batch = true;
 		File[] files = dir1.listFiles();//array dei contenuti di dir1
 		//Creo il file di log, il file handler, e lo aggiungo al logger.
-		File logFile = new File(dir2, "log.txt");
+		File logFile = null;
+		if (logType == "txt"){logFile = new File(dir2, "log.txt");}
+		else if (logType == "xml"){logFile = new File(dir2, "log.xml");}
+		else{showError("Impossibile identificare il tipo di log. " +
+				"Che hai combinato???");
+				logFile = null;}
 		FileHandler hnd = null;
+		
 		try {
 			hnd = new FileHandler(logFile.toString(), false);
-			hnd.setFormatter(new SimpleFormatter());
+			if (logType == "txt"){hnd.setFormatter(new SimpleFormatter());}
+			else if (logType == "xml"){hnd.setFormatter(new XMLFormatter());}
 			log.addHandler(hnd);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -193,6 +204,21 @@ public class ImageEngine /*implements ActionListener*/{
 		batch = false;
 	}
 	
+	
+	/**Controlla una cartella e applica le gli effetti selezionati
+	 * a tutti i file contenuti, salvando le immagini risultanti in una
+	 * seconda cartella. Nella seconda cartella include un file di
+	 * log in formato xml
+	 * 
+	 * @param dir1  la cartella dei file sorgente
+	 * @param dir2  la cartella in cui salvare i file
+	 */
+	public void batchProcess(File dir1, File dir2){
+		batchProcess(dir1, dir2, "xml");
+	}
+
+	
+	
 	/** Controlla una cartella e applica le gli effetti selezionati
 	 * a tutti i file contenuti, salvando le immagini risultanti in una
 	 * seconda cartella. Nella seconda cartella include un file di log
@@ -204,6 +230,7 @@ public class ImageEngine /*implements ActionListener*/{
 	public void batchProcess(){
 		JPanel pn = new JPanel();
 		pn.setLayout(new BoxLayout(pn, BoxLayout.PAGE_AXIS));
+		JLabel lbl = new JLabel("Formato del file di log:");
 		
 		dir1 = getFile().getParentFile();
 		dir2 = getFile().getParentFile();
@@ -263,22 +290,22 @@ public class ImageEngine /*implements ActionListener*/{
 		
 		pn.add(pn1);
 		pn.add(pn2);
+		pn.add(lbl);
+		
+		
 		
 		// il metodo chiamato, restituisce lo stesso oggetto pn che gli ho dato io
 		// in caso di conferma, altrimenti un null
-		Object o = JOptionPane.showInputDialog(frame, pn, "Applica a molti file...", JOptionPane.QUESTION_MESSAGE);
-		if (o != null) {batchProcess(dir1 ,dir2);}
-		
+		String[] opts = {"xml","txt"};
+		Object o = JOptionPane.showInputDialog(frame, pn, "Applica a molti file...",
+				JOptionPane.QUESTION_MESSAGE,
+				UIManager.getIcon("OptionPane.questionIcon"),
+				opts, opts[0]);
+		if (o != null) {
+			batchProcess(dir1 ,dir2, o.toString());
+			}	
 	}
 	
-	
-	
-	/**
-	 * ridisegna l'immagine per riflettere eventuali cambiamenti
-	 */
-	public void update(){
-		box.update();
-	}
 	
 	/**
 	 * @return il {@link File} corrispondente all'immagine aperta
@@ -310,6 +337,7 @@ public class ImageEngine /*implements ActionListener*/{
 	 * <b>num</b> effetti 
 	 * @param num l'indice dell'ultimo effetto da applicare 
 	 */
+	//TODO: chiarificare tutti i casini con gli indici
 	public void chooseEffect(int num){
 		chainBuild();
 		box.set(imglist[num + 1]);
@@ -339,6 +367,7 @@ public class ImageEngine /*implements ActionListener*/{
 	    System.arraycopy(eftlist,del+1,eftlist,del,eftlist.length-1-del);
 	    sidebar.removeEffect(del);
 	    chainBuild();
+	    chooseEffect();
 	}
 	
 	/**
@@ -373,8 +402,6 @@ public class ImageEngine /*implements ActionListener*/{
 	 * @param n numero degli elementi da ricreare
 	 */
 	public void chainBuild(int n){
-		//reload();
-		//imglist[0] = imglist[0];
 		for (int j = 0; j < n; j++) {
 			try {	imglist[j+1] = eftlist[j].getBufferedImage(imglist[j]); 
 					if (eftlist[j].getLogMessage() != null){

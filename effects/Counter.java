@@ -1,6 +1,8 @@
 package effects;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.*;
@@ -29,7 +31,7 @@ import javax.swing.border.TitledBorder;
  */
 public class Counter extends ImageEffect {
 	protected boolean[][] bklist;
-	protected int numpart, srcw, w, h;
+	protected int numpart, srcw, w, h, size;
 	protected Color[] clrsTrue = {Color.BLUE,Color.RED,Color.CYAN,Color.GREEN,
 								Color.LIGHT_GRAY,Color.MAGENTA,Color.ORANGE,
 								Color.PINK,Color.YELLOW,Color.DARK_GRAY,
@@ -38,7 +40,7 @@ public class Counter extends ImageEffect {
 	protected Color[] clrsFalseTrue = {Color.WHITE};
 	protected Color[] clrs;
 	protected Color backGdClr;
-	protected JSlider dst;
+	protected JSlider dst, minsize;
 	protected boolean chbColor = false, chbDark = false;
 	protected JCheckBox chb1, chb2;
 	
@@ -82,22 +84,32 @@ public class Counter extends ImageEffect {
 		h = img.getHeight();
 		bklist = new boolean[w][h];
 		srcw = dst.getValue();
+		int minsz = minsize.getValue();
+		System.out.println("dimnensione minima "+minsz);
+		
 		for (int x = 0; x < w; x++){ for (int y = 0; y < h; y++) {
 			bklist[x][y] = false;}}
 		for (int x = srcw; x < w-srcw; x++) { for (int y = srcw; y < h-srcw; y++) {
 			int col = img.getRGB(x, y);
-//			System.out.println("applycol"+col);
 			if (col != backGdClr.getRGB()){
 				Point thisp = new Point(x,y);
 			if ( bklist[x][y] == false){
-//				bklist[x][y] = true;
+				size = 0; 
+				//System.out.println("inizializzato"+size);
 				Point[] points = scanAround(thisp, img);
 				while (points.length > 0) {
+					size = size + points.length;
+					//System.out.println("aumentato"+size);
 					points = scanAround(points, img);
 				}
-				
+				if (size >= minsz){
 				numpart = numpart + 1;
-			}}}
+				System.out.println("incrementato" + size);
+				}
+			}
+			size = 0;
+			//System.out.println("resettato"+size);
+			}}
 		}
 		
 		Font fnt = new Font("Bookman Old Style",Font.BOLD,14);
@@ -126,21 +138,58 @@ public class Counter extends ImageEffect {
 		dst.setMinorTickSpacing(2);
 		/*sidebar.add(dst);*/
 		
+		minsize = new JSlider(1, 41);
+		minsize.setValue(1);
+		minsize.setBorder(new TitledBorder("Dimensione minima"));
+		minsize.setPaintTicks(true);
+		minsize.setPaintLabels(true);
+		minsize.setMajorTickSpacing(8);
+		minsize.setMinorTickSpacing(4);
+		
 		chb1 = new JCheckBox("Colora le particelle", chbColor);
 		chb1.addItemListener(new ItemListener() {@Override
 			public void itemStateChanged(ItemEvent arg0) {
 			chbColor = !chbColor;}});
 		
-		chb2 = new JCheckBox("Sfondo scuro", chbDark);
-		chb2.addItemListener(new ItemListener() {@Override
-			public void itemStateChanged(ItemEvent arg0) {
-			chbDark = !chbDark;}});
+		ActionListener al = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				chbDark = Boolean.getBoolean(e.getActionCommand());
+			}
+		}; 
+		
+		
+		ButtonGroup bg = new ButtonGroup();
+		JPanel radio = new JPanel();
+		radio.setBorder(new TitledBorder("Colore sfondo"));
+		
+		JRadioButton rb1 = new JRadioButton("Sfondo bianco");
+		rb1.setActionCommand("false");
+		rb1.addActionListener(al);
+		rb1.setSelected(!chbDark);
+		bg.add(rb1);
+		radio.add(rb1);
+		
+		JRadioButton rb2 = new JRadioButton("Sfondo nero");
+		rb2.setActionCommand("true");
+		rb2.addActionListener(al);
+		bg.add(rb2);
+		rb2.setSelected(chbDark);
+		radio.add(rb2);
+		
+		
+		
+		//chb2.addItemListener(new ItemListener() {@Override
+		//	public void itemStateChanged(ItemEvent arg0) {
+		//	chbDark = !chbDark;}});
 		
 		JPanel box = new JPanel();
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS)); 
 		box.add(chb1);
-		box.add(chb2);
+		box.add(radio);
+		box.add(minsize);
 		sidebar.add(box);
+		
 		
 		return sidebar;
 	}

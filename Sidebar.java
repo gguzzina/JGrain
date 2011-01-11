@@ -2,6 +2,7 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -27,7 +28,7 @@ public class Sidebar extends JPanel{
 	protected ImageEngine engine;
 	protected JComboBox combo = new JComboBox();
 	protected Section[] secs = new Section[10]; 
-
+	
 	private void comboBuild(){
 		String[] names = {new SobelJAI().getName(),
 							new BinarizeGray().getName(),
@@ -38,7 +39,7 @@ public class Sidebar extends JPanel{
 		for (int i = 0; i < names.length; i++) {
 			combo.addItem(names[i]);
 		}
-		combo.setSelectedIndex(1);
+		combo.setSelectedIndex(0);
 	}
 	
 	
@@ -49,7 +50,9 @@ public class Sidebar extends JPanel{
 	public Sidebar(final ImageEngine engine){
 		//Creo la parte superiore della sidebar
 		JPanel top = new JPanel(new FlowLayout());
-		JButton add = new JButton("+");
+		URL url = JGrain.class.getResource("icons/add.png");
+		ImageIcon icon = new ImageIcon(url);
+		JButton add = new JButton(icon); 
 			add.addActionListener(new ActionListener() {@Override
 				public void actionPerformed(ActionEvent e) {
 					int idx = combo.getSelectedIndex();
@@ -141,13 +144,17 @@ public class Sidebar extends JPanel{
 		public Section(ImageEffect eft, ImageEngine engine){
 			this.engine = engine;
 			this.num = engine.getNum();
+			URL url1 = JGrain.class.getResource("icons/apply.png");
+			ImageIcon icon1 = new ImageIcon(url1);
+			URL url2 = JGrain.class.getResource("icons/close.png");
+			ImageIcon icon2 = new ImageIcon(url2);
 			
 			setLayout(new BorderLayout());
 			JPanel south = new JPanel(new FlowLayout());
 			setBorder(new TitledBorder(eft.getName()));
-			app = new JButton("Applica");
+			app = new JButton("Applica",icon1);
 				app.addActionListener(this);
-			rmv = new JButton("Elimina");
+			rmv = new JButton("Elimina",icon2);
 				rmv.addActionListener(this);
 				
 				

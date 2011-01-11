@@ -5,7 +5,7 @@ import effects.*;
 
 /**
  * @author Giulio Guzzinati
- * @version 0.3.0
+ * @version 0.4.0
  */
 public class JGrain {
 	/**
@@ -21,8 +21,9 @@ public class JGrain {
 	System.setProperty("com.sun.media.jai.disableMediaLib", "true"); 
 	} 
 	
-	public static void main(String[] args) {
-		boolean testing = false;
+	public static void main(String[] args) {			
+	    boolean testing = false;
+
 		JFrame mainWin = new JFrame("JGrain");
 		Container mainCont = mainWin.getContentPane();
 		ImageBox box = new ImageBox();
@@ -30,10 +31,10 @@ public class JGrain {
 		MenuBar barra = new MenuBar(engine);
 		Sidebar sidebar = new Sidebar(engine);
 		
+		
 		engine.sidebar(sidebar);
 		engine.frame(mainWin);
 		mainWin.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//mainWin.setSize(1000,700);
 		mainWin.setJMenuBar(barra);
 		BorderLayout layout = new BorderLayout();
 		mainCont.setLayout(layout);
@@ -41,7 +42,18 @@ public class JGrain {
 		mainCont.add(sidebar, BorderLayout.EAST);
 		mainWin.pack();
 		mainWin.setExtendedState(mainWin.getExtendedState()|JFrame.MAXIMIZED_BOTH);
+		
+		
+		
 		mainWin.setVisible(true);
+		
+		//try {
+		//	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    //} 
+	    //catch (UnsupportedLookAndFeelException e) {e.printStackTrace();}
+	    //catch (ClassNotFoundException e) {e.printStackTrace();}
+	    //catch (InstantiationException e) {e.printStackTrace();}
+	    //catch (IllegalAccessException e) {e.printStackTrace();}
 		
 		
 		if (testing==true) {

@@ -29,25 +29,26 @@ public class BinarizeColor extends ImageEffect {
 	 */
 	@Override
 	public BufferedImage getBufferedImage(BufferedImage img) {
+		BufferedImage imgnew = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
 		for (int i = 0; i < img.getWidth(); i++) {
 			for (int j = 0; j < img.getHeight(); j++) {
 				Color pxl = new Color(img.getRGB(i,j));
 				if (rthresh.getValue() > pxl.getRed() && gthresh.getValue() > pxl.getGreen() && bthresh.getValue() > pxl.getBlue()) {
-					img.setRGB(i, j, Color.BLACK.getRGB());
+					imgnew.setRGB(i, j, Color.BLACK.getRGB());
 				} else {
-					img.setRGB(i, j, Color.WHITE.getRGB());
+					imgnew.setRGB(i, j, Color.WHITE.getRGB());
 				}
 			}
 		}
 		
-		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
-			    BufferedImage.TYPE_BYTE_BINARY);  
-			Graphics g = image.getGraphics();  
-			g.drawImage(img, 0, 0, null);  
-			g.dispose();
-		img = image;
+//		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
+//			    BufferedImage.TYPE_BYTE_BINARY);  
+//			Graphics g = image.getGraphics();  
+//			g.drawImage(img, 0, 0, null);  
+//			g.dispose();
+//		img = image;
 		
-		return img;
+		return imgnew;
 	}
 
 	/* 

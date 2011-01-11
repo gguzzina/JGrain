@@ -1,9 +1,9 @@
 import java.awt.*;
 //import java.awt.event.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.renderable.ParameterBlock;
+import java.net.URL;
 
 import javax.media.jai.*;
 import javax.swing.*;
@@ -54,8 +54,9 @@ public class ImageBox extends JPanel {
 	 * @return la toolbar creata
 	 */
 	private JPanel toolbar(){
-				
-		JButton open = new JButton("A");
+		URL uo = JGrain.class.getResource("icons/open.png");
+		ImageIcon io = new ImageIcon(uo);
+		JButton open = new JButton(io);
 		open.setToolTipText("Apri File... [crtl]+[o]");
 		open.addActionListener(new ActionListener() {
 			@Override
@@ -63,7 +64,9 @@ public class ImageBox extends JPanel {
 				engine.openImage();
 			}});
 		
-		JButton save = new JButton("S");
+		URL us = JGrain.class.getResource("icons/save.png");
+		ImageIcon is = new ImageIcon(us);
+		JButton save = new JButton(is);
 		save.setToolTipText("Salva File... [crtl]+[s]");
 		save.addActionListener(new ActionListener() {
 			@Override
@@ -71,7 +74,9 @@ public class ImageBox extends JPanel {
 				engine.saveImage();
 			}});
 		
-		JButton batch = new JButton("B");
+		URL ub = JGrain.class.getResource("icons/batch.png");
+		ImageIcon ib = new ImageIcon(ub);
+		JButton batch = new JButton(ib);
 		batch.setToolTipText("Applica a molti file... [ctrl]+[b]");
 		batch.addActionListener(new ActionListener() {
 			@Override
@@ -79,21 +84,27 @@ public class ImageBox extends JPanel {
 				engine.batchProcess();
 			}});
 		
-		JButton zmin = new JButton("Z+");
+		URL uin = JGrain.class.getResource("icons/zoom-in.png");
+		ImageIcon iin = new ImageIcon(uin);
+		JButton zmin = new JButton(iin);
 		zmin.setToolTipText("Aumenta lo zoom [ctrl]+[.]");
 		zmin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(0.1);}});
 		
-		JButton zmout = new JButton("Z-");
+		URL uout = JGrain.class.getResource("icons/zoom-out.png");
+		ImageIcon iout = new ImageIcon(uout);
+		JButton zmout = new JButton(iout);
 		zmout.setToolTipText("Riduci lo zoom [ctrl]+[,]");
 		zmout.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				zoom(-0.1);}});
 		
-		JButton zm0 = new JButton("Z=1");
+		URL u0 = JGrain.class.getResource("icons/zoom-100.png");
+		ImageIcon i0 = new ImageIcon(u0);
+		JButton zm0 = new JButton(i0);
 		zm0.setToolTipText("[ctrl]+[=]");
 		zm0.addActionListener(new ActionListener() {
 			@Override
@@ -110,11 +121,13 @@ public class ImageBox extends JPanel {
 		tb.setLayout(new BorderLayout());
 		
 		JPanel left = new JPanel();
+		left.setLayout(new BoxLayout(left, BoxLayout.LINE_AXIS));
 		left.add(open);
 		left.add(save);
 		left.add(batch);
 		
 		JPanel right = new JPanel();
+		right.setLayout(new BoxLayout(right, BoxLayout.LINE_AXIS));
 		right.add(zmin);
 		right.add(zmout);
 		right.add(zm);
@@ -138,6 +151,18 @@ public class ImageBox extends JPanel {
 		toolbar = toolbar();
 		display.setAutoscrolls(true);
 		pane = new JScrollPane(display);
+		pane.addComponentListener(new ComponentListener() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				center();
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {}
+			@Override
+			public void componentShown(ComponentEvent e) {}
+			@Override
+			public void componentHidden(ComponentEvent e) {}
+			});
 		
 		add(toolbar, BorderLayout.NORTH);
 		JViewport viewp = pane.getViewport();
@@ -188,17 +213,25 @@ public class ImageBox extends JPanel {
 
 		zm.setText(Integer.toString((int)(zoom*100)));
 		zm.setEditable(false);
-//		toolbar.repaint();
+		
 		display.set(zimg);
-		pane.validate();
-		pane.repaint();
+		center();
+		//pane.validate();
+		//pane.repaint();
 	}
 	
-	/**
-	 * aggiorna la visualizzazione dell'immagine ad eventuali cambiamenti
-	 */
-	public void update(){
-		zoom(0);
+	public void center(){
+		int[] origin = findOrigin();
+		display.setOrigin(origin[0], origin[1]);
+	}
+	
+	public int[] findOrigin(){
+		Dimension dd = display.getSize();
+		Dimension di = new Dimension(zimg.getWidth(),zimg.getHeight());
+		int[] origin = new int[2];
+		origin[0] = (int) (dd.getWidth()-di.getWidth())/2;
+		origin[1] = (int) (dd.getHeight()-di.getHeight())/2;
+		return origin;
 	}
 	
 	
