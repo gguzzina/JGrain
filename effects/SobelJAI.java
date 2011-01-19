@@ -18,11 +18,7 @@ import javax.swing.JPanel;
  *
  */
 public class SobelJAI extends ImageEffect {
-	/**
-	 * 
-	 */
-	public SobelJAI() {
-	}
+	
 	
 	@Override
 	protected RenderedOp getRenderedOp(RenderedOp op) {
@@ -52,7 +48,12 @@ public class SobelJAI extends ImageEffect {
 		
 		return sidebar;
 	}
-
+	/**Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Rilevamento bordi"
+	 * 
+	 * @return "Rilevamento bordi"
+	 */
 	@Override
 	public String getName() {
 		return "Rilevamento bordi";

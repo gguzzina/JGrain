@@ -17,10 +17,7 @@ import javax.swing.*;
  * 
  * @author Giulio Guzzinati
  */
-public abstract class ImageEffect {
-	
-
-	
+public abstract class ImageEffect {	
 	protected JPanel sidebar;
 	
 	public ImageEffect(){}
@@ -30,7 +27,7 @@ public abstract class ImageEffect {
 	
 	/**applica l'effetto ad un'immagine
 	 * @param img l'immagine a cui applicare l'effetto
-	 * @return l'immagine a cui è stato applicato l'effetto
+	 * @return l'immagine, risultato dell'effetto
 	 */
 	public abstract BufferedImage getBufferedImage(BufferedImage img);
 	
@@ -39,8 +36,9 @@ public abstract class ImageEffect {
 	 */
 	public abstract JPanel getSidebar();
 	
-	/**
-	 * @return il nome della classe
+	/**Restituisce un nome per l'effetto, da mostrare nell'interfaccia utente e nei log
+	 * 
+	 * @return il nome del'effetto
 	 */
 	public abstract String getName();
 	
@@ -55,7 +53,11 @@ public abstract class ImageEffect {
 	}
 	
 	
-	/**
+	/**Fornisce un messaggio con informazioni sull'applicazione dell'effetto.
+	 * Se l'effetto non prevede ci possano essere informazioni rilevanti,
+	 * viene restituito un <code>null</code>.
+	 * 
+	 * 
 	 * @return un messaggio informativo sull'esito dell'applicazione dell'effetto.
 	 */
 	public String getLogMessage(){

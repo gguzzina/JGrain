@@ -1,6 +1,3 @@
-/**
- * 
- */
 package effects;
 
 import java.awt.*;
@@ -12,10 +9,12 @@ import javax.media.jai.RenderedOp;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
-/**{@link ImageEffect} che binarizza un'immagine a colore sulla
- * base di 3 soglie rispettivamente per i canali RGB impostate
+/**{@link ImageEffect} che binarizza un'immagine a colori, secondo
+ * base di 3 soglie separate, una per ciascuno dei canali RGB, impostate
  * nella GUI attraverso 3 {@link JSlider} visualizzati nella
  * {@link Sidebar}
+ * 
+ * L'effetto è in grado di agire solo su immagini a colori.
  * 
  * @author Giulio Guzzinati
  */
@@ -24,23 +23,26 @@ public class BinarizeColor extends ImageEffect {
 	String name = "Monocromatizza";
 	
 	
-	/*
+	/**
+	 * 
+	 * 
 	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
 	 */
 	@Override
-	public BufferedImage getBufferedImage(BufferedImage img) {
+	public BufferedImage getBufferedImage(BufferedImage img) throws IllegalArgumentException {
 		BufferedImage imgnew = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-		for (int i = 0; i < img.getWidth(); i++) {
-			for (int j = 0; j < img.getHeight(); j++) {
-				Color pxl = new Color(img.getRGB(i,j));
-				if (rthresh.getValue() > pxl.getRed() && gthresh.getValue() > pxl.getGreen() && bthresh.getValue() > pxl.getBlue()) {
-					imgnew.setRGB(i, j, Color.BLACK.getRGB());
-				} else {
-					imgnew.setRGB(i, j, Color.WHITE.getRGB());
+		if (img.getType()!= BufferedImage.TYPE_BYTE_GRAY && img.getType() != BufferedImage.TYPE_BYTE_BINARY){
+			for (int i = 0; i < img.getWidth(); i++) {
+				for (int j = 0; j < img.getHeight(); j++) {
+					Color pxl = new Color(img.getRGB(i,j));
+					if (rthresh.getValue() > pxl.getRed() && gthresh.getValue() > pxl.getGreen() && bthresh.getValue() > pxl.getBlue()) {
+						imgnew.setRGB(i, j, Color.BLACK.getRGB());
+					} else {
+						imgnew.setRGB(i, j, Color.WHITE.getRGB());
+					}
 				}
 			}
-		}
-		
+		} else { throw new IllegalArgumentException(); } 
 //		BufferedImage image = new BufferedImage(img.getWidth(), img.getHeight(),  
 //			    BufferedImage.TYPE_BYTE_BINARY);  
 //			Graphics g = image.getGraphics();  
@@ -81,7 +83,13 @@ public class BinarizeColor extends ImageEffect {
 		return sidebar;
 	}
 	
-	
+	/**Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Binarizza, colori"
+	 * 
+	 * 
+	 * @return "Binarizza, colori"
+	 */
 	@Override
 	public String getName() {
 		return "Binarizza, colori";
@@ -94,6 +102,13 @@ public class BinarizeColor extends ImageEffect {
 		BufferedImage img = op.getAsBufferedImage();
 		pb.addSource(getBufferedImage(img));
 		return JAI.create("addconst", pb);
+	}
+	
+	
+
+	@Override
+	public String getArgumentError(){
+		return "Questa non è un'immagine a colori";
 	}
 
 }

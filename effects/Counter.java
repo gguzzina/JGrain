@@ -25,14 +25,14 @@ import javax.swing.border.TitledBorder;
  * dell'immagine, dove ogni volta che un pixel bianco viene rilevato, l'algoritmo
  * imposta il corrispondente valore a true.
  * 
- * 
+ * L'utilizzo di un'immagine non binaria genera un errore.
  * 
  * @author Giulio Guzzinati
  */
 public class Counter extends ImageEffect {
 	protected boolean[][] bklist;
 	protected int numpart, srcw, w, h, size;
-	protected Color[] clrsTrue = {Color.BLUE,Color.RED,Color.CYAN,Color.GREEN,
+	protected Color[] clrsTrue = {Color.BLUE,Color.CYAN,Color.GREEN,
 								Color.LIGHT_GRAY,Color.MAGENTA,Color.ORANGE,
 								Color.PINK,Color.YELLOW,Color.DARK_GRAY,
 								new Color(115, 0, 85)};
@@ -42,7 +42,7 @@ public class Counter extends ImageEffect {
 	protected Color backGdClr;
 	protected JSlider dst, minsize;
 	protected boolean chbColor = false, chbDark = false;
-	protected JCheckBox chb1, chb2;
+	protected JCheckBox chb1;
 	
 	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
@@ -154,7 +154,7 @@ public class Counter extends ImageEffect {
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				chbDark = Boolean.getBoolean(e.getActionCommand());
+				chbDark = Boolean.valueOf(e.getActionCommand());
 			}
 		}; 
 		
@@ -177,12 +177,7 @@ public class Counter extends ImageEffect {
 		rb2.setSelected(chbDark);
 		radio.add(rb2);
 		
-		
-		
-		//chb2.addItemListener(new ItemListener() {@Override
-		//	public void itemStateChanged(ItemEvent arg0) {
-		//	chbDark = !chbDark;}});
-		
+				
 		JPanel box = new JPanel();
 		box.setLayout(new BoxLayout(box, BoxLayout.PAGE_AXIS)); 
 		box.add(chb1);
@@ -193,7 +188,13 @@ public class Counter extends ImageEffect {
 		
 		return sidebar;
 	}
-
+	
+	/**Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Conta oggetti"
+	 * 
+	 * @return "Conta oggetti"
+	 */
 	@Override
 	public String getName() {
 		return "Conta oggetti";
@@ -217,10 +218,8 @@ public class Counter extends ImageEffect {
 		Point[] nxtpoints = new Point[(int) Math.pow((3*srcw+3),2)];
 		int numnxtp = 0;
 		for (int i = x-srcw; i <= x+srcw; i++){for (int j = y-srcw; j <= y+srcw; j++){
-//			System.out.println(i+","+j);
 			if (i >= 0 && j >= 0 && i < w && j < h){
 				col = img.getRGB(i,j);
-//			System.out.println("scancol"+col);
 			Point thisp = new Point(i,j);
 			if (col != backGdClr.getRGB() && bklist[i][j] == false) {
 					img.setRGB(i, j, clrs[numpart%clrs.length].getRGB());
@@ -239,7 +238,6 @@ public class Counter extends ImageEffect {
 		Point[] nxtpoints = new Point[(int) (pts.length*Math.pow((3*srcw+3),2))];
 		for (Point pnt : pts) {
 			Point[] tmppoints = scanAround(pnt, img);
-//			System.out.println("numnxtp ="+numnxtp+" length " + tmppoints.length);
 			System.arraycopy(tmppoints, 0, nxtpoints, numnxtp, tmppoints.length);
 			numnxtp = numnxtp + tmppoints.length;
 		}

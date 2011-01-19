@@ -16,14 +16,13 @@ import com.sun.media.jai.widget.DisplayJAI;
  * 
  * 
  * Un ImageBox è costutito da un {@link JPanel} contenente la toolbar 
- * per lo zoom dell'immagine e l'immagine stessa.
+ * e l'immagine.
  * Se necessario (l'immagine è più grossa dell'area disponibile)
  * compaiono le barre di scorrimento verticali e orizzontali.
  * Dato che utilizza il widget {@link DisplayJAI} per l'effettiva
  * visualizzazione, questa classe dipende dalle librerie JAI.
  * 
  * @author Giulio Guzzinati
- * @version 0.3
  */
 
 @SuppressWarnings("serial")
@@ -165,8 +164,8 @@ public class ImageBox extends JPanel {
 			});
 		
 		add(toolbar, BorderLayout.NORTH);
-		JViewport viewp = pane.getViewport();
-		viewp.setLayout(new BoxLayout(viewp, BoxLayout.Y_AXIS));
+		//JViewport viewp = pane.getViewport();
+		//viewp.setLayout(new BoxLayout(viewp, BoxLayout.Y_AXIS));
 		pane.getVerticalScrollBar().setUnitIncrement(10);
 		pane.getHorizontalScrollBar().setUnitIncrement(10);
 		
@@ -188,10 +187,11 @@ public class ImageBox extends JPanel {
 	
 	/**
 	 * incrementa il fattore di zoom con cui viene visualizzata l'immagine
-	 * della quantità <code>inc</code>  
+	 * della quantità <code>inc</code>.  
 	 * 
-	 * lo zoom è da intendersi come fattore e non come percentuale
-	 * (ossia il valore neutro è 1 e non 100)
+	 * Lo zoom è da intendersi come fattore e non come percentuale
+	 * (ossia il valore neutro del fattore di zoome è 1 e non 100), quindi 
+	 * per ottenere un incremento del 10% dello si deve usare zoom(0.1)
 	 * 
 	 * @param inc
 	 */
@@ -203,7 +203,7 @@ public class ImageBox extends JPanel {
 		params.add(zoom);		  // zoom Y
 		params.add(0.0f);         // traslazione X
 		params.add(0.0f);         // traslazione Y
-		params.add(Interpolation.getInstance(Interpolation.INTERP_BILINEAR));        
+		params.add(Interpolation.getInstance(Interpolation.INTERP_NEAREST));        
 		try {
 			RenderedOp img = JAI.create("scale", params);
 			zimg = img.getAsBufferedImage();
@@ -220,11 +220,21 @@ public class ImageBox extends JPanel {
 		//pane.repaint();
 	}
 	
+	/**
+	 * Centra l'immagine all'interno del widget {@link DisplayJAI},
+	 * individuando la nuova origine con il metodo <code>findOrigin()</code>
+	 */
 	public void center(){
 		int[] origin = findOrigin();
 		display.setOrigin(origin[0], origin[1]);
 	}
 	
+	/**calcola il punto da usare come origine per centrare l'immagine
+	 * 
+	 * 
+	 * @return una coppia di interi. L'elemento [0] è la <code>x</code>
+	 * 				della nuova origine, l'elemento [1] la <code>y</code>.
+	 */
 	public int[] findOrigin(){
 		Dimension dd = display.getSize();
 		Dimension di = new Dimension(zimg.getWidth(),zimg.getHeight());
@@ -243,6 +253,11 @@ public class ImageBox extends JPanel {
 		zoom(0);
 	}
 	
+	/**Comunica alla classe qual'è l'{@link ImageEngine} con cui interagire.
+	 * Questo è necessario per il funzionamento dei pulsanti della toolbar. 
+	 * 
+	 * @param engine
+	 */
 	public void engine(ImageEngine engine){
 		this.engine = engine;
 	}

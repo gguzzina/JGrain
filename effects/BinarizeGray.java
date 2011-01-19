@@ -13,15 +13,15 @@ import javax.swing.border.TitledBorder;
  * base di un valore di soglia impostato
  * nella GUI attraverso 1 {@link JSlider} visualizzato nella
  * {@link Sidebar}
+ * 
+ * L'effetto è in grado di agire solo su immagini in scala di grigi.
+ * 
  * @author Giulio Guzzinati
  */
 public class BinarizeGray extends ImageEffect {
 	protected JSlider threshold;
 
 
-	/* 
-	 * @see effects.ImageEffect#applyEffect(java.awt.image.BufferedImage)
-	 */
 	protected RenderedOp getRenderedOp(RenderedOp op){
 		ParameterBlock pb = new ParameterBlock();
 		pb.addSource(op);
@@ -52,7 +52,13 @@ public class BinarizeGray extends ImageEffect {
 		
 		return sidebar;
 	}
-
+	
+	/**Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Binarizza, scala di grigi"
+	 * 
+	 * @return "Binarizza, scala di grigi"
+	 */
 	@Override
 	public String getName() {
 		return "Binarizza, scala di grigi";

@@ -24,18 +24,24 @@ import effects.*;
  * immagini e applicazione di {@link ImageEffect}s alle immagini caricate. 
  * 
  * 
- * Internamente la classe lavora su un'immagine caricata in memoria,
- * all'interno di una {@link BufferedImage},
+ * Internamente la classe lavora su un vettore di {@link BufferedImage},
+ * il cui elemento 0 è l'immagine originale,
  * e su un array di {@link ImageEffect} che ad essa vengono applicati in sequenza.
- * Si legga in particolare del metodo <code>ChainBuild</code>.
+ * Si legga in particolare del metodo <code>chainBuild</code>.
  * 
  * 
+ * Dal momento che l'elemento <code>imglist[0]</code> è l'immagine originaria,
+ * ogni effetto <code>eftlist[i]</code> verrà applicato ad <code>imglist[i]</code>
+ * e il risultato immagazzinato in <code>imglist[i+1]</code>
  * 
+ * Tutti i metodi di questa classe che si occupano
+ * di selezionare un particolare elemento di quei vettori,
+ * sono scritti per accettare in input il numero di indice dell'effetto in
+ * <code>eftlist</code>
  * 
  *
  * @author Giulio Guzzinati 
  * 
- * @version 0.3
  */
  
 public class ImageEngine /*implements ActionListener*/{
@@ -294,8 +300,6 @@ public class ImageEngine /*implements ActionListener*/{
 		
 		
 		
-		// il metodo chiamato, restituisce lo stesso oggetto pn che gli ho dato io
-		// in caso di conferma, altrimenti un null
 		String[] opts = {"xml","txt"};
 		Object o = JOptionPane.showInputDialog(frame, pn, "Applica a molti file...",
 				JOptionPane.QUESTION_MESSAGE,
@@ -307,7 +311,8 @@ public class ImageEngine /*implements ActionListener*/{
 	}
 	
 	
-	/**
+	/**restituisce il {@link File} dell'immagine
+	 * 
 	 * @return il {@link File} corrispondente all'immagine aperta
 	 */
 	public File getFile(){
@@ -323,7 +328,7 @@ public class ImageEngine /*implements ActionListener*/{
 	
 	/**
 	 * aggiunge un effetto all'array <code>eftlist</code>
-	 * @param eft
+	 * @param eft l'effetto da aggiungere
 	 */
 	public void addEffect(ImageEffect eft){
 		eftlist[neft] = eft;
@@ -337,14 +342,13 @@ public class ImageEngine /*implements ActionListener*/{
 	 * <b>num</b> effetti 
 	 * @param num l'indice dell'ultimo effetto da applicare 
 	 */
-	//TODO: chiarificare tutti i casini con gli indici
 	public void chooseEffect(int num){
 		chainBuild();
 		box.set(imglist[num + 1]);
 	}
 	
 	/**
-	 * applica tutti gli effetti caricati all'immagine
+	 * applica all'immagine tutti gli effetti caricati
 	 */
 	public void chooseEffect(){
 		chooseEffect(neft-1);
@@ -353,9 +357,9 @@ public class ImageEngine /*implements ActionListener*/{
 	/**
 	 * rimuove un elemento dal vettore <code>eftlist</code>.
 	 * 
-	 * L'intero <code>neft</code> viene decrementato,
+	 * L'intiero <code>neft</code> viene decrementato,
 	 * e gli elementi successivi a quello eliminato vengono spostati,
-	 * in modo da avere <code>neft </code> elementi consecutivi.
+	 * in modo da avere sempre <code>neft </code> elementi consecutivi.
 	 * Dalla sidebar viene eliminata la sezione corrispondente all'effetto.
 	 * 
 	 * @param del l'indice dell'ImageEffect da eliminare
@@ -370,7 +374,7 @@ public class ImageEngine /*implements ActionListener*/{
 	    chooseEffect();
 	}
 	
-	/**
+	/**Restituisce il numero di effetti caricati
 	 * @return il numero di effetti caricati 
 	 */
 	public int getNum(){
@@ -399,6 +403,11 @@ public class ImageEngine /*implements ActionListener*/{
 	 * Ricostruisce i primi <b>n</b> elementi del vettore contente
 	 * le immagini che costuiscono i singoli punti
 	 * della catena di applicazione degli effetti.
+	 * 
+	 * Si osservi che n non può mai essere superiore di neft-1, poichè
+	 * gli gli elementi dell'array <code>eftlist</code> successivi a neft-1
+	 * sono <code>null</code>.
+	 *  
 	 * @param n numero degli elementi da ricreare
 	 */
 	public void chainBuild(int n){
@@ -406,7 +415,7 @@ public class ImageEngine /*implements ActionListener*/{
 			try {	imglist[j+1] = eftlist[j].getBufferedImage(imglist[j]); 
 					if (eftlist[j].getLogMessage() != null){
 						// se l'effetto prevede un messaggio informativo, loggarlo 
-						log.log(new LogRecord(Level.INFO, eftlist[j].getLogMessage()));
+						log.log(new LogRecord(Level.INFO,eftlist[j].getName() + ": " + eftlist[j].getLogMessage()));
 						}
 			} catch (IllegalArgumentException e) {
 				//loggare, e nel caso mostrare in popup, un eventuale errore
@@ -424,7 +433,7 @@ public class ImageEngine /*implements ActionListener*/{
 	 * principale finchè non viene chiusa, che mostra un messaggio d'errore
 	 * @param err il messaggio d'errore da visualizzare
 	 */
-	private void showError(String err) {
+	public void showError(String err) {
 		JOptionPane.showMessageDialog(frame, err, "Errore!",JOptionPane.ERROR_MESSAGE); 
 	}
 
@@ -435,7 +444,7 @@ public class ImageEngine /*implements ActionListener*/{
 	 * il vettore delle immagini calcolate.
 	 */
 	
-	public void chainUpdateFrom(int n){
+	protected void chainUpdateFrom(int n){
 		for (int j=n; j < neft; j++) {
 			try {	imglist[j+1] = eftlist[j].getBufferedImage(imglist[j]); 
 			} catch (IllegalArgumentException e) {
@@ -445,7 +454,7 @@ public class ImageEngine /*implements ActionListener*/{
 	}
 	
 	/**
-	 * Ricostruisce tutti gli elementi dell'array <code>eftlist</code>
+	 * Ricostruisce tutti gli elementi dell'array <code>imglist</code>
 	 */
 	
 	public void chainBuild(){
@@ -455,7 +464,7 @@ public class ImageEngine /*implements ActionListener*/{
 	
 	/**
 	 * Incrementa del valore indicato lo zoom dell'immagine
-	 * all'interno dell'ImageBox <code>box</code>.
+	 * all'interno dell'ImageBox di riferimento.
 	 * 
 	 * @param z l'incremento da applicare allo zoom
 	 */
@@ -464,7 +473,7 @@ public class ImageEngine /*implements ActionListener*/{
 	} 
 	
 	/**
-	 * Reimposta a 1 il fattore di zoom dell'ImageBox <code>box</code>.
+	 * Reimposta a 1 il fattore di zoom dell'ImageBox di riferimento.
 	 */
 	public void zoomReset(){
 		box.zoomReset();

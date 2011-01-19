@@ -27,7 +27,7 @@ public class Sidebar extends JPanel{
 	protected JPanel center;
 	protected ImageEngine engine;
 	protected JComboBox combo = new JComboBox();
-	protected Section[] secs = new Section[10]; 
+	protected Section[] secs = new Section[10];
 	
 	private void comboBuild(){
 		String[] names = {new SobelJAI().getName(),
@@ -43,12 +43,15 @@ public class Sidebar extends JPanel{
 	}
 	
 	
-	/**
+	/**Crea la Sidebar, e lo popola con tutti gli elementi che non fanno
+	 * parte delle sezioni inerenti i singoli effetti.  
+	 * 
 	 * @param engine l'{@link ImageEngine} a cui la
 	 * sidebar comunica le operazioni da eseguire
 	 */
 	public Sidebar(final ImageEngine engine){
 		//Creo la parte superiore della sidebar
+		this.setPreferredSize(new Dimension(320,600));
 		JPanel top = new JPanel(new FlowLayout());
 		URL url = JGrain.class.getResource("icons/add.png");
 		ImageIcon icon = new ImageIcon(url);

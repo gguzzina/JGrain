@@ -19,7 +19,8 @@ public class MenuBar extends JMenuBar {
 	protected JMenuItem zin, zout, z0;
 	protected ImageEngine engine;
 	
-	/**
+	/**Crea la menubar, che comunica con l' {@link ImageEngine} dato.
+	 * 
 	 * @param engine l'{@link ImageEngine} a cui far compiere le operazioni
 	 */
 	public MenuBar(ImageEngine engine){

@@ -12,6 +12,9 @@ import javax.swing.*;
  * Questo può essere utile nel caso l'immagine sia già costituita da toni di grigio,
  * ma utilizzi uno spazio di colori RGB, per cambiare spazio di colori.
  * 
+ * L'utilizzo di immagini già in scala di grigi,
+ * per quanto superfluo, non genera errori.
+ * 
  * @author Giulio Guzzinati
  *
  */
@@ -43,7 +46,13 @@ public class GrayScale extends ImageEffect {
 		sidebar.add(label);
 		return sidebar;
 	}
-
+	
+	/**Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Scala di grigi"
+	 * 
+	 * @return "Scala di grigi"
+	 */
 	@Override
 	public String getName() {
 		return "Scala di grigi";

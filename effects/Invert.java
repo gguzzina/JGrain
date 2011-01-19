@@ -61,7 +61,13 @@ public class Invert extends ImageEffect {
 		return sidebar;
 	}
 
-	/* 
+	/**
+	 * Restituisce un nome per l'effetto
+	 * da mostrare nell'interfaccia utente e nei log.
+	 * In questo caso "Inverti"
+	 * 
+	 * @return "Inverti"
+	 * 
 	 * @see effects.ImageEffect#getName()
 	 */
 	@Override

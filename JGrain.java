@@ -1,11 +1,22 @@
 import java.awt.*;
 import javax.swing.*;
-
 import effects.*;
 
 /**
+ * Software di analisi di immagini, dotato di un
+ * sistema che permette di combinare in sequenza vari effetti,
+ * facilmente estendibile e dotato di modalità per l'esecuzione in batch.
+ * 
+ * Internamente utilizza la Classe {@link ImageEngine} che si occupa
+ * di effettuare le operazioni di input/ouput e di elaborazione,
+ * questa servendosi delle classi del package effects
+ * 
+ *  L'interfaccia del programma è costituita da un {@link ImageBox}
+ *  affiancato da una {@link Sidebar}. 
+ * 
+ * 
  * @author Giulio Guzzinati
- * @version 0.4.0
+ * @version 1.0.0
  */
 public class JGrain {
 	/**
@@ -43,18 +54,7 @@ public class JGrain {
 		mainWin.pack();
 		mainWin.setExtendedState(mainWin.getExtendedState()|JFrame.MAXIMIZED_BOTH);
 		
-		
-		
 		mainWin.setVisible(true);
-		
-		//try {
-		//	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	    //} 
-	    //catch (UnsupportedLookAndFeelException e) {e.printStackTrace();}
-	    //catch (ClassNotFoundException e) {e.printStackTrace();}
-	    //catch (InstantiationException e) {e.printStackTrace();}
-	    //catch (IllegalAccessException e) {e.printStackTrace();}
-		
 		
 		if (testing==true) {
 			engine.addEffect(new GrayScale());
